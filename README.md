@@ -14,6 +14,9 @@ Generate harmonious palettes for web client development using the OKLCH color sp
 - tailwindcss: styling
 - i18next: translations
 - luxon: dates and times
+- culori: color space manipulation
+- headlessui: ui components
+- motion: animations
 
 ### Testing
 - vitest

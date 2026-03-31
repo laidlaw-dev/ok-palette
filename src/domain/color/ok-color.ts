@@ -1,17 +1,114 @@
 import { formatCss, formatHex, parse } from 'culori/fn';
-import { rgb } from 'culori';
+import { oklch, rgb } from 'culori';
+import type { Alpha, Chroma, Hue, Lightness } from './color-types';
+import { calculateChroma, calculateMaxChroma } from './calculate-chroma';
+import {
+  asAlpha,
+  asChroma,
+  asHue,
+  asLightness,
+  asNormalized,
+} from './color-type-utilities';
+import { invalidHexError } from './color-errors';
+import { isValidHex } from './color-validation';
 
-export interface OkRGB {
-  r: number;
-  g: number;
-  b: number;
-}
+type OkColorChromaConstructor = {
+  lightness: number;
+  chroma: number;
+  hue: number;
+  alpha?: number;
+};
 
+type OkColorHarmonizedChromaConstructor = {
+  lightness: number;
+  harmonizedChroma: number;
+  hue: number;
+  alpha?: number;
+};
+
+type OkColorConstructor =
+  | OkColorChromaConstructor
+  | OkColorHarmonizedChromaConstructor;
+
+/**
+ * Represents a color in the OKLCH color space with support for harmonic chroma normalization.
+ *
+ * @remarks
+ * The `OkColor` class encapsulates color data in the OKLCH color model, which separates
+ * color into lightness, chroma, and hue components. It provides:
+ * - Normalization and validation of color channels through domain coercion helpers
+ * - Automatic clamping of chroma values to valid ranges based on lightness and hue
+ * - Harmonic chroma tracking for perceptually consistent color transitions
+ * - Conversion to RGB and hexadecimal color formats
+ * - Static factory methods for creating `OkColor` instances from hex strings and RGB values
+ *
+ */
 export class OkColor {
-  rgbStore: OkRGB;
+  #lightness: Lightness;
+  #chroma: Chroma;
+  #harmonizedChroma: Chroma;
+  #hue: Hue;
+  #alpha: Alpha;
 
-  constructor(rgb: OkRGB) {
-    this.rgbStore = rgb;
+  get lightness() {
+    return this.#lightness;
+  }
+
+  get chroma() {
+    return this.#chroma;
+  }
+
+  get hue() {
+    return this.#hue;
+  }
+
+  get alpha() {
+    return this.#alpha;
+  }
+
+  get harmonizedChroma() {
+    return this.#harmonizedChroma;
+  }
+
+  /**
+   * Creates an `OkColor` instance from validated constructor parameters and normalizes
+   * chroma-related fields based on the provided input shape.
+   *
+   * @remarks
+   * - `lightness`, `hue`, and `alpha` are always normalized via their corresponding
+   *   domain coercion helpers.
+   * - If `harmonizedChroma` is provided, absolute `chroma` is derived from
+   *   `lightness`, `harmonizedChroma`, and `hue`.
+   * - If `harmonizedChroma` is not provided, `chroma` is clamped to the maximum
+   *   chroma allowed for the given `lightness`/`hue`, and `harmonizedChroma` is
+   *   computed from that clamped value.
+   * - When the computed maximum chroma is `0`, `harmonizedChroma` is set to `1`
+   *   to avoid division by zero.
+   *
+   * @param params - Constructor input containing color channels and either:
+   * - a `harmonizedChroma` value (from which `chroma` is computed), or
+   * - a `chroma` value (from which `harmonizedChroma` is computed after clamping).
+   */
+  constructor(params: OkColorConstructor) {
+    this.#lightness = asLightness(params.lightness);
+
+    this.#hue = asHue(params.hue);
+    this.#alpha = asAlpha(params.alpha);
+
+    if ('harmonizedChroma' in params) {
+      this.#harmonizedChroma = asChroma(params.harmonizedChroma);
+      this.#chroma = calculateChroma(
+        this.#lightness,
+        this.#harmonizedChroma,
+        this.#hue
+      );
+    } else {
+      const maxChroma = calculateMaxChroma(this.#lightness, this.#hue);
+      this.#chroma = asChroma(Math.min(params.chroma, maxChroma));
+      this.#harmonizedChroma = asChroma(
+        maxChroma === 0 ? 1 : this.#chroma / maxChroma
+      );
+    }
   }
 
   get css() {
@@ -23,32 +120,103 @@ export class OkColor {
     });
   }
 
+  /**
+   * Returns the hexadecimal string representation of the color.
+   * The method converts the OKLCH color to RGB format and then formats it as a hexadecimal string.
+   * If the alpha value is less than 1.0, it includes the alpha component in the output.
+   *
+   * @returns A string representing the color in hexadecimal format.
+   */
   get hex() {
     return formatHex(
-      rgb({
-        mode: 'rgb',
-        r: this.rgb.r,
-        g: this.rgb.g,
-        b: this.rgb.b,
+      oklch({
+        mode: 'oklch',
+        l: this.#lightness,
+        c: this.#chroma,
+        h: this.#hue,
+        alpha: this.#alpha < 1.0 ? this.#alpha : undefined,
       })
     ).toLowerCase();
   }
 
+  /**
+   * Gets the RGB color values converted from the current OKLCH color space.
+   * @returns {Object} An object containing the RGB color components and alpha value.
+   * @returns {number} returns.r - The red component (0-255).
+   * @returns {number} returns.g - The green component (0-255).
+   * @returns {number} returns.b - The blue component (0-255).
+   * @returns {number|undefined} returns.alpha - The alpha (opacity) value, or undefined if fully opaque.
+   */
   get rgb() {
-    return this.rgbStore;
+    const rgbColor = rgb(
+      oklch({
+        mode: 'oklch',
+        l: this.#lightness,
+        c: this.#chroma,
+        h: this.#hue,
+        alpha: this.#alpha < 1.0 ? this.#alpha : undefined,
+      })
+    );
+    return {
+      r: rgbColor.r,
+      g: rgbColor.g,
+      b: rgbColor.b,
+      alpha: rgbColor.alpha,
+    };
   }
 
+  /**
+   * Creates an OkColor instance from a hexadecimal color string.
+   * @param hex - The hexadecimal color string to parse (e.g., "#FF0000" or "FF0000").
+   * @returns An OkColor instance with lightness, chroma, hue, and alpha values derived from the hex string.
+   * @throws {Error} If the hex string is invalid or cannot be parsed as an RGB color.
+   */
   static fromHex(hex: string): OkColor {
-    // Placeholder implementation, replace with actual color parsing logic
-    const rgb = parse(hex);
-    if (!rgb || rgb.mode !== 'rgb') {
-      throw new Error(`Invalid hex color: ${hex}`);
+    if (!isValidHex(hex)) {
+      throw new Error(invalidHexError(hex));
     }
-    return new OkColor({ r: rgb.r, g: rgb.g, b: rgb.b });
+
+    const trimmedHex = hex.trim();
+
+    const rgb = parse(trimmedHex);
+    if (!rgb || rgb.mode !== 'rgb') {
+      throw new Error(invalidHexError(trimmedHex));
+    }
+    const oklchColor = oklch(rgb);
+    return new OkColor({
+      lightness: oklchColor.l,
+      chroma: oklchColor.c,
+      hue: asHue(oklchColor.h),
+      alpha: rgb.alpha,
+    });
   }
 
-  static fromRgb(rgb: OkRGB): OkColor {
-    // Placeholder implementation, replace with actual color parsing logic
-    return new OkColor({ r: rgb.r, g: rgb.g, b: rgb.b });
-  }
+  /**
+   * Creates an OkColor instance from RGB color values.
+   * @param color - The RGB color object
+   * @param color.r - The red channel value (0-255 or 0-1)
+   * @param color.g - The green channel value (0-255 or 0-1)
+   * @param color.b - The blue channel value (0-255 or 0-1)
+   * @param color.alpha - Optional alpha channel value (0-1)
+   * @returns An OkColor instance with converted OKLch color space values
+   */
+  static fromRgb = (color: {
+    r: number;
+    g: number;
+    b: number;
+    alpha?: number;
+  }): OkColor => {
+    const oklchColor = oklch({
+      mode: 'rgb',
+      r: asNormalized(color.r) ?? 0,
+      g: asNormalized(color.g) ?? 0,
+      b: asNormalized(color.b) ?? 0,
+    });
+    return new OkColor({
+      lightness: oklchColor.l,
+      chroma: oklchColor.c,
+      hue: asHue(oklchColor.h),
+      alpha: color.alpha,
+    });
+  };
 }

@@ -1,7 +1,7 @@
 import { hexToRgb, rgbToHex } from './color-conversion';
 
 describe('hexToRgb', () => {
-  it('should convert hex to rgb correctly', () => {
+  it('converts hex to rgb correctly', () => {
     expect(hexToRgb('#ff0000')).toEqual({
       r: expect.closeTo(1),
       g: expect.closeTo(0),
@@ -41,7 +41,7 @@ describe('hexToRgb', () => {
       alpha: expect.closeTo(0.47),
     });
   });
-  it('should throw an error for invalid hex', () => {
+  it('throws an error for invalid hex', () => {
     expect(() => hexToRgb('invalid')).toThrow();
     expect(() => hexToRgb('#12345')).toThrow();
     expect(() => hexToRgb('#1234567')).toThrow();
@@ -51,7 +51,7 @@ describe('hexToRgb', () => {
 });
 
 describe('rgbToHex', () => {
-  it('should convert rgb to hex correctly', () => {
+  it('converts rgb to hex correctly', () => {
     expect(rgbToHex({ r: 1, g: 0, b: 0 })).toBe('#ff0000');
     expect(rgbToHex({ r: 0.67, g: 0.07, b: 0.94 })).toBe('#ab12f0');
     expect(rgbToHex({ r: 0.67, g: 0.07, b: 0.94, alpha: 0.86 })).toBe(

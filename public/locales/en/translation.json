@@ -1,1 +1,9 @@
-{}
+{
+  "color_picker": {
+    "hex": "Hex",
+    "red": "Red",
+    "green": "Green",
+    "blue": "Blue",
+    "current_color": "Current Color"
+  }
+}

@@ -1,12 +1,57 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+*:focus {
+  outline: none;
+}
+
+body {
+  font-family: var(--font-display), sans-serif;
+}
+
 @theme inline {
+  --font-display: 'Open Sans';
+
+  --color-primary: var(--primary);
+  --color-control-bg: var(--background);
+  --color-control-text: var(--primary-text);
+  --color-control-border: oklch(from var(--primary) l c h / 0.4);
+  --color-hover: oklch(from var(--primary) l c h / 0.2);
+  --color-active: oklch(from var(--primary) l c h / 0.3);
+
+  --color-error-bg: var(--error-background);
+  --color-error-text: var(--error-text);
+  --color-error-border: oklch(from var(--error) l c h / 0.4);
+  --color-error-hover: oklch(from var(--error) l c h / 0.2);
+  --color-error-active: oklch(from var(--error) l c h / 0.3);
 }
 
 :root {
+  --primary: var(--color-zinc-700);
+  --primary-text: var(--color-zinc-900);
+
+  --error: var(--color-red-700);
+  --error-background: var(--color-red-50);
+  --error-text: var(--color-red-900);
+
+  --background: var(--color-zinc-50);
 }
 
 .dark {
+  --primary: var(--color-zinc-300);
+  --primary-text: var(--color-zinc-100);
+
+  --error: var(--color-red-300);
+  --error-background: var(--color-red-50);
+  --error-text: var(--color-red-900);
+
+  --background: var(--color-zinc-950);
 }

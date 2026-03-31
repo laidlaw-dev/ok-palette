@@ -2,7 +2,7 @@ import { hexToRgb, OkColor, rgbToHex, type OkRGB } from '@/domain/color';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { HexInput } from './components/HexInput';
-import { OkInput } from '../ui';
+import { OkInput, OkLabel, OkColorSlider } from '../ui';
 
 interface RgbColorPickerProps {
   initialColor: OkColor;
@@ -55,41 +55,39 @@ export const RgbColorPicker = ({
   return (
     <div className="flex items-stretch gap-4">
       <div
-        className="w-24 rounded"
+        className="border-control-border w-24 rounded border"
         style={{ backgroundColor: currentColor.hex }}
         role="img"
         aria-label={t('color_picker.current_color')}
       />
       <div className="flex w-96 flex-col gap-4">
-        <form>
-          <div className="flex flex-col">
-            <label htmlFor="hex-input">{t('color_picker.hex')}</label>
-            <HexInput
-              key={currentColor.hexKey} // Force re-mount to reset internal state when hex changes
-              id="hex-input"
-              value={currentColor.hex}
-              onChange={(newHex) => handleHexChange(newHex)}
-            />
-          </div>
-          <RgbSlider
-            label={t('color_picker.red')}
-            channel="r"
-            value={currentColor.rgb.r}
-            onChange={handleRgbChange}
+        <div className="flex flex-col">
+          <OkLabel htmlFor="hex-input">{t('color_picker.hex')}</OkLabel>
+          <HexInput
+            key={currentColor.hexKey} // Force re-mount to reset internal state when hex changes
+            id="hex-input"
+            value={currentColor.hex}
+            onChange={(newHex) => handleHexChange(newHex)}
           />
-          <RgbSlider
-            label={t('color_picker.green')}
-            channel="g"
-            value={currentColor.rgb.g}
-            onChange={handleRgbChange}
-          />
-          <RgbSlider
-            label={t('color_picker.blue')}
-            channel="b"
-            value={currentColor.rgb.b}
-            onChange={handleRgbChange}
-          />
-        </form>
+        </div>
+        <RgbSlider
+          label={t('color_picker.red')}
+          channel="r"
+          value={currentColor.rgb.r}
+          onChange={handleRgbChange}
+        />
+        <RgbSlider
+          label={t('color_picker.green')}
+          channel="g"
+          value={currentColor.rgb.g}
+          onChange={handleRgbChange}
+        />
+        <RgbSlider
+          label={t('color_picker.blue')}
+          channel="b"
+          value={currentColor.rgb.b}
+          onChange={handleRgbChange}
+        />
       </div>
     </div>
   );
@@ -103,12 +101,26 @@ interface RgbSliderProps {
 }
 
 const RgbSlider = ({ label, channel, value, onChange }: RgbSliderProps) => {
+  const startColor = OkColor.fromRgb({
+    r: 0,
+    g: 0,
+    b: 0,
+  });
+
+  const endColor = OkColor.fromRgb({
+    r: channel === 'r' ? 1 : 0,
+    g: channel === 'g' ? 1 : 0,
+    b: channel === 'b' ? 1 : 0,
+  });
+
   return (
     <div className="flex flex-col">
-      <label htmlFor={`${channel}-input`}>{label}</label>
+      <OkLabel htmlFor={`${channel}-input`}>{label}</OkLabel>
       <div className="flex gap-2">
-        <div className="relative mx-2 flex h-8 w-full items-center">
-          <input
+        <div className="flex-1">
+          <OkColorSlider
+            startColor={startColor}
+            endColor={endColor}
             type="range"
             min="0"
             max="255"

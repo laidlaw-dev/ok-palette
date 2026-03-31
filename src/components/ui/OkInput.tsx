@@ -22,7 +22,7 @@ export const OkInput = ({ invalid = false, ...props }: OkInputProps) => {
                 'ring-hover ring-2': hover && !focus && !invalid,
               },
               {
-                'ring-active ring-2': focus && !invalid,
+                'ring-focus ring-2': focus && !invalid,
               },
               {
                 'border-error-border text-error-text bg-error-bg': invalid,

@@ -33,6 +33,7 @@ body {
   --font-display: 'Open Sans';
 
   --color-primary: var(--primary);
+  --color-primary-contrast: var(--primary-contrast);
 
   --color-background: var(--background);
   --color-label: var(--label);
@@ -41,7 +42,8 @@ body {
   --color-control-text: var(--primary-text);
   --color-control-border: oklch(from var(--primary) l c h / 0.4);
   --color-hover: oklch(from var(--primary) l c h / 0.2);
-  --color-active: oklch(from var(--primary) l c h / 0.3);
+  --color-focus: oklch(from var(--primary) l c h / 0.3);
+  --color-active: oklch(from var(--primary) l c h / 0.4);
   --color-thumb-outer-1: oklch(from var(--primary-lo) l c h / 0.55);
   --color-thumb-outer-2: oklch(from var(--primary-lo) l c h / 0.35);
   --color-thumb-inner: oklch(from var(--primary-hi) l c h / 0.9);
@@ -51,10 +53,14 @@ body {
   --color-error-border: oklch(from var(--error) l c h / 0.4);
   --color-error-hover: oklch(from var(--error) l c h / 0.2);
   --color-error-active: oklch(from var(--error) l c h / 0.3);
+
+  --shadow-round-sm: 0 0 4px 2px;
+  --shadow-round-lg: 0 0 6px 3px;
 }
 
 :root {
   --primary: var(--color-zinc-700);
+  --primary-contrast: var(--color-zinc-50);
   --primary-text: var(--color-zinc-900);
   --primary-hi: var(--color-zinc-50);
   --primary-lo: var(--color-zinc-900);
@@ -69,6 +75,7 @@ body {
 
 .dark {
   --primary: var(--color-zinc-300);
+  --primary-contrast: var(--color-zinc-950);
   --primary-text: var(--color-zinc-100);
   --primary-hi: var(--color-zinc-50);
   --primary-lo: var(--color-zinc-900);

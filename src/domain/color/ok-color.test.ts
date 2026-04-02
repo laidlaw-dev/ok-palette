@@ -9,7 +9,7 @@ import {
 } from './color-type-utilities';
 import { OkColor } from './ok-color';
 import { OPAQUE } from './color-constants';
-import { formatHex, parse } from 'culori/fn';
+import { formatCss, formatHex, parse } from 'culori/fn';
 import { invalidHexError } from './color-errors';
 
 describe('OkColor', () => {
@@ -264,6 +264,146 @@ describe('OkColor', () => {
       expect(okColor.harmonizedChroma).toBeCloseTo(1.0);
       expect(okColor.hue).toBe(hue);
       expect(okColor.alpha).toBe(alpha);
+    });
+  });
+  describe('equals', () => {
+    it('returns true for equal colors', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 15,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(true);
+    });
+    it('returns true for equal colors when hue is close to wrap-around', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 0.005,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA, hue: 359.995 };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(true);
+    });
+    it('returns false for different lighntness in colors', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 15,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA, lightness: 0.6 };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(false);
+    });
+    it('returns false for different harmonized chroma in colors', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 15,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA, harmonizedChroma: 0.6 };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(false);
+    });
+    it('returns false for different hue in colors', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 15,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA, hue: 270 };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(false);
+    });
+    it('returns false for different alpha in colors', () => {
+      const oklchA = {
+        lightness: 0.7,
+        harmonizedChroma: 0.5,
+        hue: 15,
+        alpha: 0.9,
+      };
+      const oklchB = { ...oklchA, alpha: 0.8 };
+
+      const color1 = new OkColor(oklchA);
+      const color2 = new OkColor(oklchB);
+      expect(color1.equals(color2)).toBe(false);
+    });
+  });
+  describe('css', () => {
+    it('returns a css string', () => {
+      const lightness = 0.3;
+      const harmonizedChroma = 0.8;
+      const hue = 180;
+      const alpha = 0.9;
+
+      const maxChroma = getMaxChromaValue(lightness, hue);
+
+      const expectedCss = formatCss(
+        rgb(
+          oklch({
+            mode: 'oklch',
+            l: lightness,
+            c: maxChroma * harmonizedChroma,
+            h: hue,
+            alpha: alpha,
+          })
+        )
+      );
+
+      const okColor = new OkColor({
+        lightness,
+        harmonizedChroma,
+        hue,
+        alpha,
+      });
+      const cssString = okColor.css;
+      expect(cssString).toBe(expectedCss);
+    });
+
+    it('returns a css string when alpha is OPAQUE', () => {
+      const lightness = 0.3;
+      const harmonizedChroma = 0.8;
+      const hue = 180;
+      const alpha = OPAQUE;
+
+      const maxChroma = getMaxChromaValue(lightness, hue);
+
+      const expectedCss = formatCss(
+        rgb(
+          oklch({
+            mode: 'oklch',
+            l: lightness,
+            c: maxChroma * harmonizedChroma,
+            h: hue,
+          })
+        )
+      );
+
+      const okColor = new OkColor({
+        lightness,
+        harmonizedChroma,
+        hue,
+        alpha,
+      });
+      const cssString = okColor.css;
+      expect(cssString).toBe(expectedCss);
     });
   });
   describe('hex', () => {

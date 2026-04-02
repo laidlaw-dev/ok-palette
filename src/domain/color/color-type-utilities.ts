@@ -1,4 +1,8 @@
-import { OPAQUE } from './color-constants';
+import {
+  ANGLE_TOLERANCE,
+  NORMALIZED_TOLERANCE,
+  OPAQUE,
+} from './color-constants';
 import type {
   Alpha,
   Angle,
@@ -77,4 +81,52 @@ export const asAlpha = (value: number | undefined): Alpha => {
     return OPAQUE as Alpha; // Default to fully opaque if alpha is undefined
   }
   return asNormalized(value) as Alpha;
+};
+
+/**
+ * Compares two numbers for equality within a specified tolerance, treating undefined values as equal.
+ *
+ * @param a A number that may be outside the range of 0 to 1, or undefined.
+ * @param b A number that may be outside the range of 0 to 1, or undefined.
+ * @returns A boolean indicating whether the two numbers are equal within the specified tolerance.
+ */
+export const isNormalizedEqual = (
+  a: number | undefined,
+  b: number | undefined
+) => {
+  const normalizedA = asNormalized(a);
+  const normalizedB = asNormalized(b);
+
+  if (normalizedA === undefined && normalizedB === undefined) {
+    return true;
+  }
+  if (normalizedA === undefined || normalizedB === undefined) {
+    return false;
+  }
+
+  return Math.abs(normalizedA - normalizedB) <= NORMALIZED_TOLERANCE;
+};
+
+/**
+ * Compares two angles for equality within a specified tolerance, treating undefined values as equal.
+ *
+ * @param a A number that may be outside the range of 0 to 359, or undefined.
+ * @param b A number that may be outside the range of 0 to 359, or undefined.
+ * @returns A boolean indicating whether the two angles are equal within the specified tolerance.
+ */
+export const isAngleEqual = (a: number | undefined, b: number | undefined) => {
+  if (a === undefined && b === undefined) {
+    return true;
+  }
+  if (a === undefined || b === undefined) {
+    return false;
+  }
+
+  const normalizedA = asAngle(a);
+  const normalizedB = asAngle(b);
+
+  const diff = Math.abs(normalizedA - normalizedB);
+  const wrappedDiff = Math.min(diff, 360 - diff);
+
+  return wrappedDiff <= ANGLE_TOLERANCE;
 };

@@ -8,6 +8,8 @@ import {
   asHue,
   asLightness,
   asNormalized,
+  isAngleEqual,
+  isNormalizedEqual,
 } from './color-type-utilities';
 import { invalidHexError } from './color-errors';
 import { isValidHex } from './color-validation';
@@ -111,13 +113,42 @@ export class OkColor {
     }
   }
 
+  /**
+   * Compares the current OkColor instance with another OkColor instance for equality.
+   * Two OkColor instances are considered equal if their lightness, harmonized chroma, hue, and alpha values are all equal.
+   *
+   * @param other - Another OkColor instance to compare with the current instance for equality.
+   * @returns
+   */
+  equals(other: OkColor) {
+    return (
+      isNormalizedEqual(this.#lightness, other.lightness) &&
+      isNormalizedEqual(this.#harmonizedChroma, other.harmonizedChroma) &&
+      isAngleEqual(this.#hue, other.hue) &&
+      isNormalizedEqual(this.#alpha, other.alpha)
+    );
+  }
+
+  /**
+   * Gets the CSS string representation of the color.
+   * Converts the color from OKLCh color space to RGB and formats it as a CSS color string.
+   *
+   * @returns {string} A CSS color string in RGB format. If the alpha value is less than 1.0,
+   * it will be included in the output to represent transparency; otherwise, it is omitted.
+   *
+   */
   get css() {
-    return formatCss({
-      mode: 'rgb',
-      r: this.rgb.r,
-      g: this.rgb.g,
-      b: this.rgb.b,
-    });
+    return formatCss(
+      rgb(
+        oklch({
+          mode: 'oklch',
+          l: this.#lightness,
+          c: this.#chroma,
+          h: this.hue,
+          alpha: this.#alpha < 1.0 ? this.#alpha : undefined,
+        })
+      )
+    );
   }
 
   /**

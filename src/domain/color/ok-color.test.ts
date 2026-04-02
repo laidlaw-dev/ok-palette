@@ -7,7 +7,7 @@ import {
   asLightness,
   asNormalized,
 } from './color-type-utilities';
-import { OkColor } from './ok-color';
+import { asOkColorChromaConstructor, OkColor } from './ok-color';
 import { OPAQUE } from './color-constants';
 import { formatCss, formatHex, parse } from 'culori/fn';
 import { invalidHexError } from './color-errors';
@@ -231,12 +231,14 @@ describe('OkColor', () => {
 
       const maxChroma = getMaxChromaValue(lightness, hue);
 
-      const okColor = new OkColor({
-        lightness,
-        chroma,
-        hue,
-        alpha,
-      });
+      const okColor = new OkColor(
+        asOkColorChromaConstructor({
+          lightness,
+          chroma,
+          hue,
+          alpha,
+        })
+      );
 
       expect(okColor.lightness).toBe(lightness);
       expect(okColor.chroma).toBeCloseTo(chroma);
@@ -252,12 +254,14 @@ describe('OkColor', () => {
 
       const maxChroma = getMaxChromaValue(lightness, hue);
 
-      const okColor = new OkColor({
-        lightness,
-        chroma,
-        hue,
-        alpha,
-      });
+      const okColor = new OkColor(
+        asOkColorChromaConstructor({
+          lightness,
+          chroma,
+          hue,
+          alpha,
+        })
+      );
 
       expect(okColor.lightness).toBe(lightness);
       expect(okColor.chroma).toBeCloseTo(maxChroma);
@@ -423,12 +427,14 @@ describe('OkColor', () => {
         })
       ).toLowerCase();
 
-      const okColor = new OkColor({
-        lightness,
-        chroma,
-        hue,
-        alpha,
-      });
+      const okColor = new OkColor(
+        asOkColorChromaConstructor({
+          lightness,
+          chroma,
+          hue,
+          alpha,
+        })
+      );
       const hexString = okColor.hex;
       expect(hexString).toBe(expectedHex);
     });
@@ -446,11 +452,13 @@ describe('OkColor', () => {
         })
       ).toLowerCase();
 
-      const okColor = new OkColor({
-        lightness,
-        chroma,
-        hue,
-      });
+      const okColor = new OkColor(
+        asOkColorChromaConstructor({
+          lightness,
+          chroma,
+          hue,
+        })
+      );
       const hexString = okColor.hex;
       expect(hexString).toBe(expectedHex);
     });
@@ -469,12 +477,14 @@ describe('OkColor', () => {
         })
       ).toLowerCase();
 
-      const okColor = new OkColor({
-        lightness,
-        chroma,
-        hue,
-        alpha,
-      });
+      const okColor = new OkColor(
+        asOkColorChromaConstructor({
+          lightness,
+          chroma,
+          hue,
+          alpha,
+        })
+      );
       const hexString = okColor.hex;
       expect(hexString).toBe(expectedHex);
     });
@@ -496,7 +506,9 @@ describe('OkColor', () => {
         })
       );
 
-      const color = new OkColor({ lightness, chroma, hue, alpha });
+      const color = new OkColor(
+        asOkColorChromaConstructor({ lightness, chroma, hue, alpha })
+      );
       const rgbObject = color.rgb;
       expect(rgbObject.r).toEqual(expectedRgb.r);
       expect(rgbObject.g).toEqual(expectedRgb.g);
@@ -517,7 +529,9 @@ describe('OkColor', () => {
         })
       );
 
-      const color = new OkColor({ lightness, chroma, hue });
+      const color = new OkColor(
+        asOkColorChromaConstructor({ lightness, chroma, hue })
+      );
       const rgbObject = color.rgb;
       expect(rgbObject.r).toEqual(expectedRgb.r);
       expect(rgbObject.g).toEqual(expectedRgb.g);
@@ -539,7 +553,9 @@ describe('OkColor', () => {
         })
       );
 
-      const color = new OkColor({ lightness, chroma, hue, alpha });
+      const color = new OkColor(
+        asOkColorChromaConstructor({ lightness, chroma, hue, alpha })
+      );
       const rgbObject = color.rgb;
       expect(rgbObject.r).toEqual(expectedRgb.r);
       expect(rgbObject.g).toEqual(expectedRgb.g);

@@ -21,6 +21,10 @@ type OkColorChromaConstructor = {
   alpha?: number;
 };
 
+type BrandedOkColorChromaConstructor = OkColorChromaConstructor & {
+  readonly __brand: 'OkColorChromaConstructor';
+};
+
 type OkColorHarmonizedChromaConstructor = {
   lightness: number;
   harmonizedChroma: number;
@@ -29,8 +33,17 @@ type OkColorHarmonizedChromaConstructor = {
 };
 
 type OkColorConstructor =
-  | OkColorChromaConstructor
+  | BrandedOkColorChromaConstructor
   | OkColorHarmonizedChromaConstructor;
+
+// The chroma constructor should only be used internally when creating OkColor instances
+// from hex or RGB inputs, to save recalculating max chroma. The type is branded to
+// prevent accidental external usage.
+export const asOkColorChromaConstructor = (
+  params: OkColorChromaConstructor
+): BrandedOkColorChromaConstructor => {
+  return { ...params, __brand: 'OkColorChromaConstructor' };
+};
 
 /**
  * Represents a color in the OKLCH color space with support for harmonic chroma normalization.
@@ -214,12 +227,14 @@ export class OkColor {
       throw new Error(invalidHexError(trimmedHex));
     }
     const oklchColor = oklch(rgb);
-    return new OkColor({
-      lightness: oklchColor.l,
-      chroma: oklchColor.c,
-      hue: asHue(oklchColor.h),
-      alpha: rgb.alpha,
-    });
+    return new OkColor(
+      asOkColorChromaConstructor({
+        lightness: oklchColor.l,
+        chroma: oklchColor.c,
+        hue: asHue(oklchColor.h),
+        alpha: rgb.alpha,
+      })
+    );
   }
 
   /**
@@ -243,11 +258,13 @@ export class OkColor {
       g: asNormalized(color.g) ?? 0,
       b: asNormalized(color.b) ?? 0,
     });
-    return new OkColor({
-      lightness: oklchColor.l,
-      chroma: oklchColor.c,
-      hue: asHue(oklchColor.h),
-      alpha: color.alpha,
-    });
+    return new OkColor(
+      asOkColorChromaConstructor({
+        lightness: oklchColor.l,
+        chroma: oklchColor.c,
+        hue: asHue(oklchColor.h),
+        alpha: color.alpha,
+      })
+    );
   };
 }

@@ -5,34 +5,23 @@ import type { PaletteCollection } from './palette-types';
 
 type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
-  initialize: ({
-    initalColor,
-    paletteName,
-    colorName,
-  }: {
-    initalColor: OkColor;
-    paletteName: string;
-    colorName: string;
-  }) => void;
+  initialize: (primaryColor: OkColor) => void;
   reset: () => void;
 };
 
 /**
  * Palette store using Zustand for managing color palettes and their related data.
- * 
+ *
  * @returns {PaletteStore} The palette store object with state and actions
- * 
+ *
  * @property {Color[]} colors - Array of color objects in the store
  * @property {Palette[]} palettes - Array of palette objects
  * @property {ColorSet[]} colorSets - Array of color set objects
  * @property {string} selectedPaletteId - ID of the currently selected palette
- * 
+ *
  * @method initialize - Initializes the store with a new palette and color
- * @param {Object} options - Initialization options
- * @param {Object} options.initalColor - The initial color object containing hue, lightness, and harmonizedChroma
- * @param {string} options.paletteName - Name for the new palette
- * @param {string} options.colorName - Name for the initial color
- * 
+ * @param {Object} primaryColor - The primary color object containing hue, lightness, and harmonizedChroma
+ *
  * @method reset - Resets the store to its initial state
  */
 export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
@@ -40,22 +29,22 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
   palettes: [],
   colorSets: [],
   selectedPaletteId: '',
-  initialize: ({ initalColor, paletteName, colorName }) => {
+  initialize: (primaryColor) => {
     const paletteId = nanoid();
     set({
       colors: [
         {
           id: nanoid(),
-          name: colorName,
-          hue: initalColor.hue,
+          name: undefined,
+          hue: primaryColor.hue,
         },
       ],
       palettes: [
         {
           id: paletteId,
-          name: paletteName,
-          defaultLightness: initalColor.lightness,
-          defaultChroma: initalColor.harmonizedChroma,
+          name: undefined,
+          defaultLightness: primaryColor.lightness,
+          defaultChroma: primaryColor.harmonizedChroma,
           colorSetIds: [],
         },
       ],

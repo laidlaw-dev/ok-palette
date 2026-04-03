@@ -2,7 +2,7 @@ import type { Chroma, Hue, Lightness } from '../../domain/color';
 
 export type PaletteColor = {
   id: string;
-  name: string;
+  name?: string;
   hue: Hue;
 };
 
@@ -16,7 +16,7 @@ export type PaletteColorSet = {
 
 export type Palette = {
   id: string;
-  name: string;
+  name?: string;
   defaultLightness: Lightness;
   defaultChroma: Chroma;
   colorSetIds: string[];

@@ -5,7 +5,7 @@ import { usePalette } from '@/stores/palette/usePalette';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const InitialColor = () => {
+export const InitialColorDialog = () => {
   const { t } = useTranslation();
   const [color, setColor] = useState(OkColor.fromRgb({ r: 0, g: 0.5, b: 0.8 }));
   const { initialize } = usePalette();
@@ -15,11 +15,7 @@ export const InitialColor = () => {
       <RgbColorPicker initialColor={color} onColorChange={setColor} />
       <OkButton
         onClick={() => {
-          initialize({
-            initalColor: color,
-            paletteName: 'My Palette',
-            colorName: 'My Color',
-          });
+          initialize(color);
         }}
       >
         {t('common.select')}

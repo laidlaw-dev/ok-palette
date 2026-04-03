@@ -12,36 +12,32 @@ describe('usePalette', () => {
     it('returns isInitialized as true after initialization', () => {
       const { result } = renderHook(() => usePalette());
       act(() => {
-        result.current.initialize({
-          initalColor: new OkColor({
+        result.current.initialize(
+          new OkColor({
             hue: 120,
             lightness: 0.5,
             harmonizedChroma: 0.5,
-          }),
-          paletteName: 'test_palette',
-          colorName: 'test_color',
-        });
+          })
+        );
       });
       expect(result.current.isInitialized).toBe(true);
     });
     it('returns generated palette after initialization', () => {
       const { result } = renderHook(() => usePalette());
       act(() => {
-        result.current.initialize({
-          initalColor: new OkColor({
+        result.current.initialize(
+          new OkColor({
             hue: 120,
             lightness: 0.5,
             harmonizedChroma: 0.5,
-          }),
-          paletteName: 'test_palette',
-          colorName: 'test_color',
-        });
+          })
+        );
       });
 
       const palette = result.current.generatedPalette;
-      const color = palette.allColors[0];
 
-      expect(color.name).toBe('test_color');
+      const color = palette.allColors[0];
+      expect(color.name).toBeUndefined();
       expect(
         new OkColor({
           hue: 120,

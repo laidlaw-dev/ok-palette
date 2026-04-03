@@ -10,6 +10,10 @@
     "current_color": "Current Color"
   },
   "initial_setup": {
-    "title": "Initial color"
+    "title": "Primary color"
+  },
+  "palette": {
+    "default_palette_name": "Default",
+    "default_color_name": "Primary"
   }
 }

@@ -1,12 +1,89 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/fonts/OpenSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans Condensed';
+  src: url('/fonts/OpenSans_Condensed-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans Condensed';
+  src: url('/fonts/OpenSans_Condensed-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+*:focus {
+  outline: none;
+}
+
+body {
+  font-family: var(--font-display), sans-serif;
+}
+
 @theme inline {
+  --font-display: 'Open Sans';
+
+  --color-primary: var(--primary);
+  --color-primary-contrast: var(--primary-contrast);
+
+  --color-background: var(--background);
+  --color-label: var(--label);
+
+  --color-control-bg: var(--background);
+  --color-control-text: var(--primary-text);
+  --color-control-border: oklch(from var(--primary) l c h / 0.4);
+  --color-hover: oklch(from var(--primary) l c h / 0.2);
+  --color-focus: oklch(from var(--primary) l c h / 0.3);
+  --color-active: oklch(from var(--primary) l c h / 0.4);
+  --color-thumb-outer-1: oklch(from var(--primary-lo) l c h / 0.55);
+  --color-thumb-outer-2: oklch(from var(--primary-lo) l c h / 0.35);
+  --color-thumb-inner: oklch(from var(--primary-hi) l c h / 0.9);
+
+  --color-error-bg: var(--error-background);
+  --color-error-text: var(--error-text);
+  --color-error-border: oklch(from var(--error) l c h / 0.4);
+  --color-error-hover: oklch(from var(--error) l c h / 0.2);
+  --color-error-active: oklch(from var(--error) l c h / 0.3);
+
+  --shadow-round-sm: 0 0 4px 2px;
+  --shadow-round-lg: 0 0 6px 3px;
 }
 
 :root {
+  --primary: var(--color-zinc-700);
+  --primary-contrast: var(--color-zinc-50);
+  --primary-text: var(--color-zinc-900);
+  --primary-hi: var(--color-zinc-50);
+  --primary-lo: var(--color-zinc-900);
+
+  --error: var(--color-red-700);
+  --error-background: var(--color-red-50);
+  --error-text: var(--color-red-900);
+
+  --background: var(--color-zinc-50);
+  --label: var(--color-zinc-600);
 }
 
 .dark {
+  --primary: var(--color-zinc-300);
+  --primary-contrast: var(--color-zinc-950);
+  --primary-text: var(--color-zinc-100);
+  --primary-hi: var(--color-zinc-50);
+  --primary-lo: var(--color-zinc-900);
+
+  --error: var(--color-red-300);
+  --error-background: var(--color-red-50);
+  --error-text: var(--color-red-900);
+
+  --background: var(--color-zinc-950);
+  --label: var(--color-zinc-400);
 }

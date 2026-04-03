@@ -1,0 +1,47 @@
+@import '@/index.css';
+
+.sliderThumb {
+  @apply w-full appearance-none bg-transparent outline-none;
+}
+
+.sliderThumb::-webkit-slider-thumb {
+  appearance: none;
+  @apply h-4 w-4 cursor-pointer rounded-full;
+  border: 2px solid var(--color-thumb-outer-1);
+  background: transparent;
+  box-shadow:
+    0 0 0 2px var(--color-thumb-inner),
+    0 0 0 4px var(--color-thumb-outer-1),
+    0 1px 6px var(--color-thumb-outer-2);
+}
+
+.sliderThumb:hover::-webkit-slider-thumb,
+.sliderThumb:focus::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 4px var(--color-thumb-inner),
+    0 0 0 6px var(--color-thumb-outer-1),
+    0 2px 8px var(--color-thumb-outer-2);
+}
+
+.sliderThumb::-moz-range-thumb {
+  @apply h-6 w-6 cursor-pointer rounded-full;
+  border: 1px solid var(--color-thumb-outer-1);
+  background: var(--color-thumb-inner);
+  box-shadow:
+    0 0 0 4px var(--color-thumb-inner),
+    0 0 0 6px var(--color-thumb-outer-1),
+    0 1px 7px var(--color-thumb-outer-2);
+}
+
+.sliderThumb:hover::-moz-range-thumb,
+.sliderThumb:focus::-moz-range-thumb {
+  box-shadow:
+    0 0 0 4px var(--color-thumb-inner),
+    0 0 0 6px var(--color-thumb-outer-1),
+    0 2px 8px var(--color-thumb-outer-2);
+}
+
+.sliderThumb::-moz-range-track {
+  background: transparent;
+  border: 0;
+}

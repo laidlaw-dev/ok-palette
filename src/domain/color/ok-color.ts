@@ -13,11 +13,12 @@ import {
 } from './color-type-utilities';
 import { invalidHexError } from './color-errors';
 import { isValidHex } from './color-validation';
+import { ACHROMATIC } from './color-constants';
 
 type OkColorChromaConstructor = {
   lightness: number;
   chroma: number;
-  hue: number;
+  hue?: number;
   alpha?: number;
 };
 
@@ -28,13 +29,20 @@ type BrandedOkColorChromaConstructor = OkColorChromaConstructor & {
 type OkColorHarmonizedChromaConstructor = {
   lightness: number;
   harmonizedChroma: number;
-  hue: number;
+  hue?: number;
   alpha?: number;
 };
 
 type OkColorConstructor =
   | BrandedOkColorChromaConstructor
   | OkColorHarmonizedChromaConstructor;
+
+type OKColorCopyWithParams = {
+  lightness?: number;
+  harmonizedChroma?: number;
+  hue?: number | null;
+  alpha?: number;
+};
 
 // The chroma constructor should only be used internally when creating OkColor instances
 // from hex or RGB inputs, to save recalculating max chroma. The type is branded to
@@ -59,10 +67,16 @@ export const asOkColorChromaConstructor = (
  *
  */
 export class OkColor {
+  // lightness is the OKLCH lightness channel, normalized to [0, 1]
   #lightness: Lightness;
+  // chroma is the absolute OKLCH chroma channel, normalized to [0, 1],
+  // but also clamped to the maximum chroma for the given lightness/hue
   #chroma: Chroma;
+  // harmonizedChroma is the chroma value adjusted for perceptual consistency, normalized to [0, 1]
   #harmonizedChroma: Chroma;
+  // hue is the OKLCH hue channel, normalized to [0, 359] degrees or null for achromatic colors
   #hue: Hue;
+  // alpha is the opacity channel, normalized to [0, 1]
   #alpha: Alpha;
 
   get lightness() {
@@ -131,16 +145,31 @@ export class OkColor {
    * any provided properties.
    *
    * Any field omitted in `params` retains its value from the current instance.
+   * The `hue` property can be set to `null` to create an achromatic color.
    *
    * @param params - A partial set of color properties to override on the copied instance.
    * @returns A new `OkColor` with merged values from the current instance and `params`.
    */
-  copyWith(params: Partial<OkColorHarmonizedChromaConstructor>) {
+  copyWith(params: OKColorCopyWithParams) {
     return new OkColor({
       lightness: params.lightness ?? this.#lightness,
       harmonizedChroma: params.harmonizedChroma ?? this.#harmonizedChroma,
-      hue: params.hue ?? this.#hue,
+      hue: params.hue === ACHROMATIC ? undefined : (params.hue ?? this.#hue),
       alpha: params.alpha ?? this.#alpha,
+    });
+  }
+
+  /**
+   * Creates a new OkColor instance with the hue rotated by the specified amount.
+   * @param rotation - The amount in degrees to rotate the hue by.
+   * @returns A new OkColor instance with the rotated hue, preserving all other properties.
+   */
+  copyWithRotation(rotation: number) {
+    return new OkColor({
+      lightness: this.#lightness,
+      harmonizedChroma: this.#harmonizedChroma,
+      hue: this.#hue === undefined ? undefined : asHue(this.#hue + rotation),
+      alpha: this.#alpha,
     });
   }
 

@@ -17,6 +17,7 @@ const inRgb = inGamut('rgb');
  */
 export const calculateMaxChroma = (lightness: Lightness, hue: Hue): Chroma => {
   if (lightness === 0 || lightness === 1) return 0 as Chroma;
+  if (hue === undefined) return 0 as Chroma;
   return testColor(lightness, hue, asChroma(0), MAX_CHROMA);
 };
 
@@ -26,6 +27,7 @@ const testColor = (
   lowChroma: Chroma,
   highChroma: Chroma
 ): Chroma => {
+  if (hue === undefined) return 0 as Chroma;
   if (highChroma - lowChroma < NORMALIZED_TOLERANCE) {
     return lowChroma;
   }

@@ -334,6 +334,16 @@ describe('generateComplementaryColors', () => {
         })
       )
     ).toBe(true);
+    expect(complementaryColors.achromatic).toHaveLength(1);
+    expect(
+      complementaryColors.achromatic[0].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
+          hue: undefined,
+        })
+      )
+    ).toBe(true);
     expect(complementaryColors.analogous).toHaveLength(4);
     expect(
       complementaryColors.analogous[0].equals(
@@ -425,6 +435,16 @@ describe('generateComplementaryColors', () => {
           lightness: 0.7,
           harmonizedChroma: 0.7,
           hue: 135, // 120 degrees clockwise from base
+        })
+      )
+    ).toBe(true);
+    expect(complementaryColors.achromatic).toHaveLength(1);
+    expect(
+      complementaryColors.achromatic[0].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
+          hue: undefined,
         })
       )
     ).toBe(true);

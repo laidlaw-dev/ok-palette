@@ -112,6 +112,30 @@ describe('filterAvailableColors', () => {
     const triadicGroup = result.find((group) => group.key === 'triadic');
     expect(triadicGroup).toBeUndefined();
   });
+  it('adds achromatic when achromatic is available', () => {
+    const expectedAchromatic =
+      generateComplementaryColors(primary).achromatic[0];
+
+    const usedColors: OkColor[] = [primary];
+
+    const result = filterAvailableColors(primary, usedColors);
+
+    const achromaticGroup = result.find((group) => group.key === 'achromatic');
+    expect(achromaticGroup).toBeDefined();
+    expect(achromaticGroup?.colors.length).toBe(1);
+    expect(achromaticGroup?.colors[0].equals(expectedAchromatic)).toBe(true);
+  });
+  it('does not add achromatic when achromatic is already used', () => {
+    const expectedAchromatic =
+      generateComplementaryColors(primary).achromatic[0];
+
+    const usedColors: OkColor[] = [primary, expectedAchromatic];
+
+    const result = filterAvailableColors(primary, usedColors);
+
+    const achromaticGroup = result.find((group) => group.key === 'achromatic');
+    expect(achromaticGroup).toBeUndefined();
+  });
   it('adds analogous when analogous colors are all available', () => {
     const expectedAnalogous = generateComplementaryColors(primary).analogous;
 

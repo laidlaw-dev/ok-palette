@@ -13,6 +13,9 @@ describe('calculateMaxChroma', () => {
   it('returns 0 when lightness is 1', () => {
     expect(calculateMaxChroma(asLightness(1), asHue(180))).toBe(0);
   });
+  it('returns 0 when hue is undefined', () => {
+    expect(calculateMaxChroma(asLightness(0.5), undefined)).toBe(0);
+  });
   it('returns max chroma for a visible very dark magenta', () => {
     const lightness = asLightness(0.01);
     const hue = asHue(0);
@@ -119,6 +122,12 @@ describe('calculateChroma', () => {
     const hue = asHue(180);
 
     expect(calculateChroma(lightness, harmonizedChroma, hue)).toBe(0);
+  });
+  it('returns 0 when hue is undefined', () => {
+    const lightness = asLightness(0.5);
+    const harmonizedChroma = asChroma(1);
+
+    expect(calculateChroma(lightness, harmonizedChroma, undefined)).toBe(0);
   });
   it('returns 0 when harmonizedChroma is 0', () => {
     const lightness = asLightness(1);

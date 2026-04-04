@@ -47,8 +47,8 @@ describe('asAngle', () => {
     expect(asAngle(720)).toBe(0);
     expect(asAngle(810)).toBe(90);
   });
-  it('returns 0 when value is undefined', () => {
-    expect(asAngle(undefined)).toBe(0);
+  it('returns undefine when value is undefined', () => {
+    expect(asAngle(undefined)).toBeUndefined();
   });
 });
 

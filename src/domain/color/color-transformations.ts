@@ -1,3 +1,4 @@
+import { ACHROMATIC } from './color-constants';
 import type { OkColor } from './ok-color';
 
 export const generateAnalogousColors = (
@@ -13,20 +14,15 @@ export const generateAnalogousColors = (
     i < count ? i - count : i - count + 1
   );
 
-  return slots.map((slot) => color.copyWith({ hue: color.hue + slot * angle }));
+  return slots.map((slot) => color.copyWithRotation(slot * angle));
 };
 
 export const generateComplementaryColors = (color: OkColor) => {
   return {
-    complementary: [color.copyWith({ hue: color.hue + 180 })],
-    split: [
-      color.copyWith({ hue: color.hue - 150 }),
-      color.copyWith({ hue: color.hue + 150 }),
-    ],
-    triadic: [
-      color.copyWith({ hue: color.hue - 120 }),
-      color.copyWith({ hue: color.hue + 120 }),
-    ],
+    complementary: [color.copyWithRotation(180)],
+    split: [color.copyWithRotation(-150), color.copyWithRotation(150)],
+    triadic: [color.copyWithRotation(-120), color.copyWithRotation(120)],
+    achromatic: [color.copyWith({ hue: ACHROMATIC })],
     analogous: generateAnalogousColors(color, { angle: 15, count: 2 }),
   };
 };

@@ -20,6 +20,7 @@ const complementaryKeys = [
   'complementary',
   'split',
   'triadic',
+  'achromatic',
   'analogous',
 ] as const;
 

@@ -270,6 +270,101 @@ describe('OkColor', () => {
       expect(okColor.alpha).toBe(alpha);
     });
   });
+  describe('copyWith', () => {
+    it('creates copy with lightness set', () => {
+      const originalLightness = 0.7;
+      const newLightness = 0.3;
+      const harmonizedChroma = 0.8;
+      const hue = 180;
+
+      const source = new OkColor({
+        lightness: originalLightness,
+        harmonizedChroma,
+        hue,
+      });
+
+      const newChroma = getChromaValue(newLightness, harmonizedChroma, hue);
+
+      const okColor = source.copyWith({ lightness: newLightness });
+
+      expect(okColor.lightness).toBe(newLightness);
+      expect(okColor.chroma).toBeCloseTo(newChroma);
+      expect(okColor.harmonizedChroma).toBe(harmonizedChroma);
+      expect(okColor.hue).toBe(hue);
+      expect(okColor.alpha).toBe(1);
+    });
+    it('creates copy with harmonized chroma set', () => {
+      const lightness = 0.7;
+      const originalHarmonizedChroma = 0.8;
+      const newHarmonizedChroma = 0.3;
+      const hue = 180;
+
+      const source = new OkColor({
+        lightness,
+        harmonizedChroma: originalHarmonizedChroma,
+        hue,
+      });
+
+      const newChroma = getChromaValue(lightness, newHarmonizedChroma, hue);
+
+      const okColor = source.copyWith({
+        harmonizedChroma: newHarmonizedChroma,
+      });
+
+      expect(okColor.lightness).toBe(lightness);
+      expect(okColor.chroma).toBeCloseTo(newChroma);
+      expect(okColor.harmonizedChroma).toBe(newHarmonizedChroma);
+      expect(okColor.hue).toBe(hue);
+      expect(okColor.alpha).toBe(1);
+    });
+    it('creates copy with hue set', () => {
+      const lightness = 0.3;
+      const harmonizedChroma = 0.8;
+      const originalHue = 180;
+      const newHue = 90;
+
+      const source = new OkColor({
+        lightness,
+        harmonizedChroma,
+        hue: originalHue,
+      });
+
+      const newChroma = getChromaValue(lightness, harmonizedChroma, newHue);
+
+      const okColor = source.copyWith({ hue: newHue });
+
+      expect(okColor.lightness).toBe(lightness);
+      expect(okColor.chroma).toBeCloseTo(newChroma);
+      expect(okColor.harmonizedChroma).toBe(harmonizedChroma);
+      expect(okColor.hue).toBe(newHue);
+      expect(okColor.alpha).toBe(1);
+    });
+    it('creates copy with alpha set', () => {
+      const lightness = 0.3;
+      const harmonizedChroma = 0.8;
+      const hue = 180;
+      const originalAlpha = 0.9;
+      const newAlpha = 0.4;
+
+      const source = new OkColor({
+        lightness,
+        harmonizedChroma,
+        hue,
+        alpha: originalAlpha,
+      });
+
+      const newChroma = getChromaValue(lightness, harmonizedChroma, hue);
+
+      const okColor = source.copyWith({ alpha: newAlpha });
+
+      expect(okColor.lightness).toBe(lightness);
+      expect(okColor.chroma).toBeCloseTo(newChroma);
+      expect(okColor.harmonizedChroma).toBe(harmonizedChroma);
+      expect(okColor.hue).toBe(hue);
+      expect(okColor.alpha).toBe(newAlpha);
+    });
+  });
+
   describe('equals', () => {
     it('returns true for equal colors', () => {
       const oklchA = {

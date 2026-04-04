@@ -127,6 +127,24 @@ export class OkColor {
   }
 
   /**
+   * Creates a new `OkColor` instance by copying the current color and selectively overriding
+   * any provided properties.
+   *
+   * Any field omitted in `params` retains its value from the current instance.
+   *
+   * @param params - A partial set of color properties to override on the copied instance.
+   * @returns A new `OkColor` with merged values from the current instance and `params`.
+   */
+  copyWith(params: Partial<OkColorHarmonizedChromaConstructor>) {
+    return new OkColor({
+      lightness: params.lightness ?? this.#lightness,
+      harmonizedChroma: params.harmonizedChroma ?? this.#harmonizedChroma,
+      hue: params.hue ?? this.#hue,
+      alpha: params.alpha ?? this.#alpha,
+    });
+  }
+
+  /**
    * Compares the current OkColor instance with another OkColor instance for equality.
    * Two OkColor instances are considered equal if their lightness, harmonized chroma, hue, and alpha values are all equal.
    *

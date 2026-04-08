@@ -29,12 +29,14 @@ export function asNormalized(
   return Math.min(Math.max(value, 0), 1) as Normalized;
 }
 
+export function asAngle(value: number): Angle;
+export function asAngle(value: number | undefined): Angle | undefined;
 /**
  * Converts a numeric value to a normalized angle in the range [0, 359].
  *
  * @param value - The angle value to normalize. Can be any number or undefined.
- *                Undefined values are treated as 0.
- * @returns An angle normalized to the range [0, 359] degrees.
+ *                Undefined values are treated as undefined.
+ * @returns An angle normalized to the range [0, 359] degrees, or undefined if input is undefined.
  *
  * @example
  * asAngle(450)    // Returns 90
@@ -42,13 +44,13 @@ export function asNormalized(
  * asAngle(45)     // Returns 45
  * asAngle(undefined) // Returns 0
  */
-export const asAngle = (value: number | undefined): Angle => {
-  if (value === undefined) return 0 as Angle;
+export function asAngle(value: number | undefined): Angle | undefined {
+  if (value === undefined) return undefined;
   if (value < 0)
     return (value + Math.ceil(Math.abs(value) / 360) * 360) as Angle;
   if (value > 359) return (value - Math.floor(value / 360) * 360) as Angle;
   return value as Angle;
-};
+}
 
 /**
  * Converts a numeric value to a normalized Lightness value.

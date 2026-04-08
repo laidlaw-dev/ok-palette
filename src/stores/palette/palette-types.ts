@@ -1,8 +1,8 @@
-import type { Chroma, Hue, Lightness } from '../../domain/color';
+import type { Chroma, Hue, Lightness, OkColor } from '../../domain/color';
 
 export type PaletteColor = {
   id: string;
-  name?: string;
+  name: string;
   hue: Hue;
 };
 
@@ -23,6 +23,7 @@ export type Palette = {
 };
 
 export type PaletteCollection = {
+  primaryColor: OkColor;
   colors: PaletteColor[];
   colorSets: PaletteColorSet[];
   palettes: Palette[];

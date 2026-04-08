@@ -1,0 +1,63 @@
+import { usePalette } from '@/stores/palette';
+import { filterAvailableColors } from './utils/filter-available-colors';
+import { NewColorForm } from './components/NewColorForm';
+import type { OkColor } from '@/domain/color/ok-color';
+import { useState } from 'react';
+import { OkDialog } from '@/components/ui/OkDialog';
+import { useTranslation } from 'react-i18next';
+import { SuggestedColors } from './components/SuggestedColors';
+import { OkTitle } from '@/components/ui';
+import { CustomColor } from './components/CustomColor';
+
+export const ColorPicker = () => {
+  const { t } = useTranslation();
+
+  const { addColor, generatedPalette, primaryColor } = usePalette();
+
+  const [dialogData, setDialogData] = useState<{
+    name: string;
+    color: OkColor;
+  } | null>(null);
+
+  const colorGroups = filterAvailableColors(
+    primaryColor,
+    generatedPalette.allColors.map((c) => c.color)
+  );
+
+  const handleAddColor = (baseName: string, color: OkColor) => {
+    setDialogData({ name: baseName.toLowerCase(), color });
+  };
+
+  const handleSubmitNewColor = (newName: string) => {
+    if (dialogData) {
+      addColor(newName, dialogData.color);
+      setDialogData(null);
+    }
+  };
+
+  return (
+    <>
+      <div className="border-control-border flex h-full min-h-0 w-62 flex-col gap-4 border-r p-2">
+        <OkTitle>{t('color_pickers.custom_color')}</OkTitle>
+        <CustomColor initialColor={primaryColor} onSubmit={handleAddColor} />
+        <OkTitle>{t('color_pickers.suggested_colors')}</OkTitle>
+        <div className="flex-1 overflow-y-auto">
+          <SuggestedColors
+            colorGroups={colorGroups}
+            onAddColor={handleAddColor}
+          />
+        </div>
+      </div>
+      <OkDialog isOpen={!!dialogData} onClose={() => setDialogData(null)}>
+        <NewColorForm
+          baseName={
+            dialogData ? t(`color_names.${dialogData.name}`).toLowerCase() : ''
+          }
+          usedNames={generatedPalette.allColors.map((c) => c.name)}
+          onClose={() => setDialogData(null)}
+          onSubmit={handleSubmitNewColor}
+        />
+      </OkDialog>
+    </>
+  );
+};

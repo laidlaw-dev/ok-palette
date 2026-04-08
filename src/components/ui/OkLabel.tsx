@@ -1,11 +1,18 @@
 import type { ReactNode } from 'react';
 
 interface OkLabelProps {
-  htmlFor: string;
+  htmlFor?: string;
   children: ReactNode;
 }
 
 export const OkLabel = ({ htmlFor, children }: OkLabelProps) => {
+  if (!htmlFor) {
+    return (
+      <div className="text-label font-[Open_Sans_Condensed] text-sm font-bold">
+        {children}
+      </div>
+    );
+  }
   return (
     <label
       htmlFor={htmlFor}

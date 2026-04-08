@@ -41,7 +41,7 @@ body {
   --color-control-bg: var(--background);
   --color-control-text: var(--primary-text);
   --color-control-border: oklch(from var(--primary) l c h / 0.4);
-  --color-hover: oklch(from var(--primary) l c h / 0.2);
+  --color-hover: oklch(from var(--primary) l c h / 0.3);
   --color-focus: oklch(from var(--primary) l c h / 0.3);
   --color-active: oklch(from var(--primary) l c h / 0.4);
   --color-thumb-outer-1: oklch(from var(--primary-lo) l c h / 0.55);

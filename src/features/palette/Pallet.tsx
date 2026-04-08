@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { usePalette } from '@/stores/palette';
 import { InitialColorDialog } from './components/InitialColorDialog';
+import { PaletteEditor } from '../palette-editor/PaletteEditor';
 
 export const Palette = () => {
   const { isInitialized } = usePalette();
@@ -32,8 +33,8 @@ export const Palette = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div>Editor</div>
+            <div className="absolute inset-0">
+              <PaletteEditor />
             </div>
           </motion.div>
         )}

@@ -33,7 +33,7 @@ export const Palette = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0">
               <PaletteEditor />
             </div>
           </motion.div>

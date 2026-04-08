@@ -1,19 +1,46 @@
 {
   "common": {
-    "select": "Select"
+    "select": "Select",
+    "cancel": "Cancel"
   },
   "color_picker": {
     "hex": "Hex",
     "red": "Red",
     "green": "Green",
     "blue": "Blue",
-    "current_color": "Current Color"
+    "hue": "Hue",
+    "current_color": "Current Color",
+    "suggested_colors": "Suggested Colors"
   },
   "initial_setup": {
     "title": "Primary color"
   },
   "palette": {
     "default_palette_name": "Default",
-    "default_color_name": "primary"
+    "default_color_name": "primary",
+    "add_color": "Add Color",
+    "color_name": "Color name"
+  },
+  "hue_names": {
+    "color": "Color",
+    "complements": "Complements",
+    "hues": "Hues",
+    "primary": "Primary",
+    "complementary": "Complement",
+    "triadic": "Triadic",
+    "split": "Split",
+    "achromatic": "Grey",
+    "analogous": "Analogous",
+    "red": "Red",
+    "yellow": "Yellow",
+    "green": "Green",
+    "cyan": "Cyan",
+    "blue": "Blue",
+    "purple": "Purple",
+    "pink": "Pink"
+  },
+  "validation": {
+    "required_color_name": "Color name is required",
+    "unique_color_name": "Name already in use"
   }
 }

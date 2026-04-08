@@ -4,14 +4,16 @@ import { Fragment } from 'react';
 
 interface OkInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   invalid?: boolean;
+  ref?: React.Ref<HTMLInputElement>;
 }
 
-export const OkInput = ({ invalid = false, ...props }: OkInputProps) => {
+export const OkInput = ({ invalid = false, ref, ...props }: OkInputProps) => {
   return (
     <Input as={Fragment} invalid={invalid} {...props}>
       {({ focus, hover }: { focus: boolean; hover: boolean }) => {
         return (
           <input
+            ref={ref}
             className={clsx(
               'rounded border px-2 py-1 transition-colors',
               {

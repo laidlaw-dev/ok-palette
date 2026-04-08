@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
  */
 export const InitialColorDialog = () => {
   const { t } = useTranslation();
-  const [color, setColor] = useState(OkColor.fromRgb({ r: 0, g: 0.5, b: 0.8 }));
+  const [color, setColor] = useState(OkColor.fromRgb({ r: 0, g: 0.7, b: 0.9 }));
   const { initialize } = usePalette();
   return (
     <div className="border-control-border flex flex-col gap-4 rounded border p-4">

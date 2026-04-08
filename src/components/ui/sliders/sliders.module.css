@@ -45,3 +45,21 @@
   background: transparent;
   border: 0;
 }
+
+.wheelThumb {
+  @apply absolute cursor-pointer rounded-full;
+  border: 2px solid var(--color-thumb-outer-1);
+  background: transparent;
+  box-shadow:
+    0 0 0 2px var(--color-thumb-inner),
+    0 0 0 4px var(--color-thumb-outer-1),
+    0 1px 6px var(--color-thumb-outer-2);
+}
+
+.wheelThumb:hover,
+.wheelThumb:focus {
+  box-shadow:
+    0 0 0 4px var(--color-thumb-inner),
+    0 0 0 6px var(--color-thumb-outer-1),
+    0 2px 8px var(--color-thumb-outer-2);
+}

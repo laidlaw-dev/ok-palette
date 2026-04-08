@@ -1,9 +1,14 @@
 import {
-  generateAnalogousColors,
+  generateSpectrum,
   generateComplementaryColors,
   OkColor,
 } from '@/domain/color';
-import { colorHueMap, filterAvailableColors } from './filterAvailableColors';
+import {
+  colorHueMap,
+  filterAvailableColors,
+  HUE_ANGLE,
+  HUE_COUNT,
+} from './filter-available-colors';
 
 const primary = new OkColor({
   lightness: 0.5,
@@ -180,9 +185,9 @@ describe('filterAvailableColors', () => {
   });
   it('adds hue-based group when all colors are available', () => {
     colorHueMap.forEach(({ key, hue }) => {
-      const hues = generateAnalogousColors(primary.copyWith({ hue }), {
-        angle: 15,
-        count: 2,
+      const hues = generateSpectrum(primary.copyWith({ hue }), {
+        angle: HUE_ANGLE,
+        count: HUE_COUNT,
       });
       const usedColors: OkColor[] = [];
 
@@ -195,31 +200,21 @@ describe('filterAvailableColors', () => {
       ).toBeDefined();
       expect(
         hueGroup?.colors.length,
-        `Hue group for key "${key}" should have 4 colors`
-      ).toBe(4);
-      expect(
-        hueGroup?.colors[0].equals(hues[0]),
-        `Hue group for key "${key}" color 0 should match`
-      ).toBe(true);
-      expect(
-        hueGroup?.colors[1].equals(hues[1]),
-        `Hue group for key "${key}" color 1 should match`
-      ).toBe(true);
-      expect(
-        hueGroup?.colors[2].equals(hues[2]),
-        `Hue group for key "${key}" color 2 should match`
-      ).toBe(true);
-      expect(
-        hueGroup?.colors[3].equals(hues[3]),
-        `Hue group for key "${key}" color 3 should match`
-      ).toBe(true);
+        `Hue group for key "${key}" should have ${HUE_COUNT * 2 + 1} colors`
+      ).toBe(HUE_COUNT * 2 + 1);
+      for (let i = 0; i < hues.length; i++) {
+        expect(
+          hueGroup?.colors[i].equals(hues[i]),
+          `Hue group for key "${key}" color ${i} should match`
+        ).toBe(true);
+      }
     });
   });
   it('adds hue-based group when some hue colors are available', () => {
     colorHueMap.forEach(({ key, hue }) => {
-      const hues = generateAnalogousColors(primary.copyWith({ hue }), {
-        angle: 15,
-        count: 2,
+      const hues = generateSpectrum(primary.copyWith({ hue }), {
+        angle: HUE_ANGLE,
+        count: HUE_COUNT,
       });
       const usedColors: OkColor[] = [hues[0], hues[2]];
 
@@ -232,23 +227,21 @@ describe('filterAvailableColors', () => {
       ).toBeDefined();
       expect(
         hueGroup?.colors.length,
-        `Hue group for key "${key}" should have 2 colors`
-      ).toBe(2);
+        `Hue group for key "${key}" should have ${HUE_COUNT * 2 + 1 - 2} colors`
+      ).toBe(HUE_COUNT * 2 + 1 - 2);
       expect(
-        hueGroup?.colors[0].equals(hues[1]),
-        `Hue group for key "${key}" color 0 should match`
-      ).toBe(true);
+        hueGroup?.colors.find((color) => color.equals(hues[0]))
+      ).toBeUndefined();
       expect(
-        hueGroup?.colors[1].equals(hues[3]),
-        `Hue group for key "${key}" color 1 should match`
-      ).toBe(true);
+        hueGroup?.colors.find((color) => color.equals(hues[2]))
+      ).toBeUndefined();
     });
   });
   it('does not add hue-based group when all colors are used', () => {
     colorHueMap.forEach(({ key, hue }) => {
-      const hues = generateAnalogousColors(primary.copyWith({ hue }), {
-        angle: 15,
-        count: 2,
+      const hues = generateSpectrum(primary.copyWith({ hue }), {
+        angle: HUE_ANGLE,
+        count: HUE_COUNT,
       });
       const usedColors: OkColor[] = [...hues];
 

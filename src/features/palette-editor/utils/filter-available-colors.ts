@@ -1,19 +1,21 @@
 import {
   asHue,
-  generateAnalogousColors,
+  generateSpectrum,
   generateComplementaryColors,
   isAngleEqual,
   type OkColor,
 } from '@/domain/color';
 
+export const HUE_ANGLE = 9;
+export const HUE_COUNT = 3;
+
 export const colorHueMap = [
   { key: 'red', hue: asHue(15) },
-  { key: 'orange', hue: asHue(45) },
   { key: 'yellow', hue: asHue(75) },
   { key: 'green', hue: asHue(135) },
   { key: 'cyan', hue: asHue(195) },
   { key: 'blue', hue: asHue(255) },
-  { key: 'purple', hue: asHue(285) },
+  { key: 'purple', hue: asHue(315) },
 ];
 
 const complementaryKeys = [
@@ -24,7 +26,7 @@ const complementaryKeys = [
   'analogous',
 ] as const;
 
-interface AvailableColorGroup {
+export interface AvailableColorGroup {
   key: string;
   colors: OkColor[];
 }
@@ -48,11 +50,11 @@ export const filterAvailableColors = (
 
   // Add hues if any analogous colors are available for that hue
   const hues = colorHueMap.reduce((acc, color) => {
-    const analogousColors = generateAnalogousColors(
+    const analogousColors = generateSpectrum(
       primary.copyWith({ hue: color.hue }),
       {
-        angle: 15,
-        count: 2,
+        angle: HUE_ANGLE,
+        count: HUE_COUNT,
       }
     );
     const availableColors = analogousColors.filter(

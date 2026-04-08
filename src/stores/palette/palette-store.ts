@@ -6,6 +6,7 @@ import type { PaletteCollection } from './palette-types';
 type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
   initialize: (primaryColor: OkColor) => void;
+  addColor: (name: string, color: OkColor) => void;
   reset: () => void;
 };
 
@@ -50,6 +51,12 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
       ],
       colorSets: [],
       selectedPaletteId: paletteId,
+    });
+  },
+  addColor: (name, color) => {
+    set((state) => {
+      const newColor = { id: nanoid(), name, hue: color.hue };
+      return { colors: [...state.colors, newColor] };
     });
   },
   reset: () => {

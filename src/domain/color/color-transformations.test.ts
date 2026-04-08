@@ -1,19 +1,19 @@
 import {
-  generateAnalogousColors,
+  generateSpectrum,
   generateComplementaryColors,
 } from './color-transformations';
 import { OkColor } from './ok-color';
 
-describe('generateAnalogousColors', () => {
+describe('generateSpectrum', () => {
   it('generates analogous colors with default options', () => {
     const baseColor = new OkColor({
       lightness: 0.7,
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor);
+    const analogousColors = generateSpectrum(baseColor);
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -25,6 +25,15 @@ describe('generateAnalogousColors', () => {
     ).toBe(true);
     expect(
       analogousColors[1].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
+          hue: 180, // original color
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[2].equals(
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
@@ -39,9 +48,9 @@ describe('generateAnalogousColors', () => {
       harmonizedChroma: 0.7,
       hue: 10,
     });
-    const analogousColors = generateAnalogousColors(baseColor);
+    const analogousColors = generateSpectrum(baseColor);
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -56,6 +65,15 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 10, // original color
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[2].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 40, // 30 degrees clockwise
         })
       )
@@ -67,9 +85,9 @@ describe('generateAnalogousColors', () => {
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { angle: 15 });
+    const analogousColors = generateSpectrum(baseColor, { angle: 15 });
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -84,6 +102,15 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 180, // original color
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[2].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 195, // 15 degrees clockwise
         })
       )
@@ -95,9 +122,9 @@ describe('generateAnalogousColors', () => {
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { angle: -5 });
+    const analogousColors = generateSpectrum(baseColor, { angle: -5 });
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -112,6 +139,15 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 180, // original color
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[2].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 181, // 1 degree clockwise
         })
       )
@@ -123,9 +159,9 @@ describe('generateAnalogousColors', () => {
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { angle: 35 });
+    const analogousColors = generateSpectrum(baseColor, { angle: 35 });
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -140,6 +176,15 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 180, // original color
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[2].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 210, // 30 degrees clockwise
         })
       )
@@ -151,9 +196,9 @@ describe('generateAnalogousColors', () => {
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { count: 2 });
+    const analogousColors = generateSpectrum(baseColor, { count: 2 });
 
-    expect(analogousColors).toHaveLength(4);
+    expect(analogousColors).toHaveLength(5);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -177,7 +222,7 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
-          hue: 210, // 30 degrees clockwise
+          hue: 180, // original color
         })
       )
     ).toBe(true);
@@ -186,20 +231,29 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 210, // 30 degrees clockwise
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[4].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 240, // 60 degrees clockwise
         })
       )
     ).toBe(true);
   });
-  it('generates 6 analogous colors with count option = 3', () => {
+  it('generates 7 analogous colors with count option = 3', () => {
     const baseColor = new OkColor({
       lightness: 0.7,
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { count: 3 });
+    const analogousColors = generateSpectrum(baseColor, { count: 3 });
 
-    expect(analogousColors).toHaveLength(6);
+    expect(analogousColors).toHaveLength(7);
     expect(
       analogousColors[0].equals(
         new OkColor({
@@ -232,7 +286,7 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
-          hue: 210, // 30 degrees clockwise
+          hue: 180, // original color
         })
       )
     ).toBe(true);
@@ -241,7 +295,7 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
-          hue: 240, // 60 degrees clockwise
+          hue: 210, // 30 degrees clockwise
         })
       )
     ).toBe(true);
@@ -250,30 +304,39 @@ describe('generateAnalogousColors', () => {
         new OkColor({
           lightness: 0.7,
           harmonizedChroma: 0.7,
+          hue: 240, // 60 degrees clockwise
+        })
+      )
+    ).toBe(true);
+    expect(
+      analogousColors[6].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
           hue: 270, // 90 degrees clockwise
         })
       )
     ).toBe(true);
   });
-  it('generates 2 analogous colors with count option < 1', () => {
+  it('generates 3 analogous colors with count option < 1', () => {
     const baseColor = new OkColor({
       lightness: 0.7,
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { count: 0 });
+    const analogousColors = generateSpectrum(baseColor, { count: 0 });
 
-    expect(analogousColors).toHaveLength(2);
+    expect(analogousColors).toHaveLength(3);
   });
-  it('generates 6 analogous colors with count option > 3', () => {
+  it('generates 7 analogous colors with count option > 3', () => {
     const baseColor = new OkColor({
       lightness: 0.7,
       harmonizedChroma: 0.7,
       hue: 180,
     });
-    const analogousColors = generateAnalogousColors(baseColor, { count: 5 });
+    const analogousColors = generateSpectrum(baseColor, { count: 5 });
 
-    expect(analogousColors).toHaveLength(6);
+    expect(analogousColors).toHaveLength(7);
   });
 });
 

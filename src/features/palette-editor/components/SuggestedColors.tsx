@@ -1,11 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import type { AvailableColorGroup } from '../utils/filter-available-colors';
 import type { OkColor } from '@/domain/color/ok-color';
-import { OkLabel } from '@/components/ui';
+import { OkColorButton, OkLabel } from '@/components/ui';
 import { AnimatePresence, motion } from 'framer-motion';
-import clsx from 'clsx';
-import { Button } from '@headlessui/react';
-import { Fragment } from 'react/jsx-runtime';
 
 interface SuggestedColorsProps {
   colorGroups: AvailableColorGroup[];
@@ -47,7 +44,7 @@ export const SuggestedColors = ({
   ].filter((section) => section.groups.length > 0);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 px-2">
       <ColorGroup sections={colorGroupSections} onAddColor={onAddColor} />
     </div>
   );
@@ -88,47 +85,5 @@ const ColorGroup = ({ sections, onAddColor }: ColorGroupProps) => {
         </motion.div>
       ))}
     </AnimatePresence>
-  );
-};
-
-interface OkColorButtonProps {
-  color: OkColor;
-  onClick: () => void;
-}
-
-const OkColorButton = ({ color, onClick }: OkColorButtonProps) => {
-  return (
-    <Button as={Fragment}>
-      {({
-        focus,
-        hover,
-        active,
-      }: {
-        focus: boolean;
-        hover: boolean;
-        active: boolean;
-      }) => {
-        return (
-          <button
-            className={clsx(
-              'h-6 w-6 rounded border transition',
-              {
-                'ring-hover ring-2': hover && !focus && !active,
-              },
-              {
-                'ring-active shadow-control-border shadow-round-lg ring-1':
-                  active,
-              },
-              {
-                'ring-focus ring-2': focus,
-              }
-            )}
-            style={{ backgroundColor: color.css, borderColor: color.css }}
-            onClick={onClick}
-            aria-label={color.hex}
-          />
-        );
-      }}
-    </Button>
   );
 };

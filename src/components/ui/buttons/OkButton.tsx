@@ -1,6 +1,7 @@
+import { Fragment, type ReactNode } from 'react';
+import { buttonStyles } from './button-styles';
 import { Button } from '@headlessui/react';
 import clsx from 'clsx';
-import { Fragment, type ReactNode } from 'react';
 
 interface OkButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -21,16 +22,16 @@ export const OkButton = ({ children, ...props }: OkButtonProps) => {
         return (
           <button
             className={clsx(
-              'bg-primary text-primary-contrast rounded px-4 py-1 font-[Open_Sans_Condensed] transition',
+              buttonStyles.base,
+              'bg-primary border-primary text-primary-contrast px-4 py-1 font-[Open_Sans_Condensed]',
               {
-                'ring-hover ring-2': hover && !focus && !active,
+                [buttonStyles.hover]: hover && !focus && !active,
               },
               {
-                'ring-active shadow-control-border shadow-round-lg ring-1':
-                  active,
+                [buttonStyles.active]: active,
               },
               {
-                'ring-focus ring-2': focus,
+                [buttonStyles.focus]: focus,
               }
             )}
           >

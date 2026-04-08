@@ -21,7 +21,7 @@ describe('NewColorForm', () => {
       />
     );
 
-    const input = screen.getByLabelText('palette.color_name');
+    const input = screen.getByLabelText('color_pickers.color_name');
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('color-2');
   });
@@ -36,10 +36,12 @@ describe('NewColorForm', () => {
       />
     );
 
-    const input = screen.getByLabelText('palette.color_name');
+    const input = screen.getByLabelText('color_pickers.color_name');
     fireEvent.change(input, { target: { value: '' } });
 
-    const addButton = screen.getByRole('button', { name: 'palette.add_color' });
+    const addButton = screen.getByRole('button', {
+      name: 'color_pickers.add_color',
+    });
     fireEvent.click(addButton);
 
     expect(
@@ -58,10 +60,12 @@ describe('NewColorForm', () => {
       />
     );
 
-    const input = screen.getByLabelText('palette.color_name');
+    const input = screen.getByLabelText('color_pickers.color_name');
     fireEvent.change(input, { target: { value: 'color-3' } });
 
-    const addButton = screen.getByRole('button', { name: 'palette.add_color' });
+    const addButton = screen.getByRole('button', {
+      name: 'color_pickers.add_color',
+    });
     fireEvent.click(addButton);
 
     expect(
@@ -80,10 +84,12 @@ describe('NewColorForm', () => {
       />
     );
 
-    const input = screen.getByLabelText('palette.color_name');
+    const input = screen.getByLabelText('color_pickers.color_name');
     fireEvent.change(input, { target: { value: 'color-4' } });
 
-    const addButton = screen.getByRole('button', { name: 'palette.add_color' });
+    const addButton = screen.getByRole('button', {
+      name: 'color_pickers.add_color',
+    });
     fireEvent.click(addButton);
 
     expect(onSubmit).toHaveBeenCalledWith('color-4');
@@ -99,10 +105,12 @@ describe('NewColorForm', () => {
       />
     );
 
-    const input = screen.getByLabelText('palette.color_name');
+    const input = screen.getByLabelText('color_pickers.color_name');
     fireEvent.change(input, { target: { value: 'color' } });
 
-    const addButton = screen.getByRole('button', { name: 'palette.add_color' });
+    const addButton = screen.getByRole('button', {
+      name: 'color_pickers.add_color',
+    });
     fireEvent.click(addButton);
 
     expect(

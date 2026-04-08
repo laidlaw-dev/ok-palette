@@ -4,11 +4,19 @@ import { SuggestedColors } from './SuggestedColors';
 import type { AvailableColorGroup } from '../utils/filter-available-colors';
 import { OkColor } from '@/domain/color';
 
-const complementary = OkColor.fromHex('#770077');
-const grey = OkColor.fromHex('#808080');
-const red = OkColor.fromHex('#aa0000');
-const green = OkColor.fromHex('#00aa00');
-const blue = OkColor.fromHex('#0000aa');
+const complementary = new OkColor({
+  lightness: 0.5,
+  harmonizedChroma: 0.5,
+  hue: 180,
+});
+const grey = new OkColor({
+  lightness: 0.5,
+  harmonizedChroma: 0,
+  hue: undefined,
+});
+const red = new OkColor({ lightness: 0.5, harmonizedChroma: 0.5, hue: 0 });
+const green = new OkColor({ lightness: 0.5, harmonizedChroma: 0.5, hue: 120 });
+const blue = new OkColor({ lightness: 0.5, harmonizedChroma: 0.5, hue: 240 });
 
 describe('SuggestedColors', () => {
   it('renders color groups with correct labels', () => {
@@ -21,13 +29,13 @@ describe('SuggestedColors', () => {
     ];
 
     render(<SuggestedColors colorGroups={colorGroups} onAddColor={() => {}} />);
-    expect(screen.getByText('hue_names.complements')).toBeInTheDocument();
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: complementary.hex })
     ).toBeInTheDocument();
-    expect(screen.getByText('hue_names.achromatic')).toBeInTheDocument();
+    expect(screen.getByText('color_names.achromatic')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: grey.hex })).toBeInTheDocument();
-    expect(screen.getByText('hue_names.hues')).toBeInTheDocument();
+    expect(screen.getByText('color_names.hues')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: red.hex })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: green.hex })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: blue.hex })).toBeInTheDocument();
@@ -40,9 +48,13 @@ describe('SuggestedColors', () => {
     ];
 
     render(<SuggestedColors colorGroups={colorGroups} onAddColor={() => {}} />);
-    expect(screen.queryByText('hue_names.complements')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.complements')
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
   });
   it('renders complements group and button when complementary colors are available', () => {
     const mock_onAddColor = vi.fn();
@@ -53,9 +65,11 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.getByText('hue_names.complements')).toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
 
     const complementaryButton = screen.getByRole('button', {
       name: complementary.hex,
@@ -63,7 +77,11 @@ describe('SuggestedColors', () => {
     fireEvent.click(complementaryButton);
     expect(mock_onAddColor).toHaveBeenCalledWith(
       'complementary',
-      complementary
+      expect.objectContaining({
+        lightness: complementary.lightness,
+        harmonizedChroma: complementary.harmonizedChroma,
+        hue: complementary.hue,
+      })
     );
   });
   it('renders complements group and buttonwhen split complementary colors are available', () => {
@@ -75,15 +93,24 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.getByText('hue_names.complements')).toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
 
     const complementaryButton = screen.getByRole('button', {
       name: complementary.hex,
     });
     fireEvent.click(complementaryButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('split', complementary);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'split',
+      expect.objectContaining({
+        lightness: complementary.lightness,
+        harmonizedChroma: complementary.harmonizedChroma,
+        hue: complementary.hue,
+      })
+    );
   });
   it('renders complements group when triadic complementary colors are available', () => {
     const mock_onAddColor = vi.fn();
@@ -94,15 +121,24 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.getByText('hue_names.complements')).toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
 
     const complementaryButton = screen.getByRole('button', {
       name: complementary.hex,
     });
     fireEvent.click(complementaryButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('triadic', complementary);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'triadic',
+      expect.objectContaining({
+        lightness: complementary.lightness,
+        harmonizedChroma: complementary.harmonizedChroma,
+        hue: complementary.hue,
+      })
+    );
   });
   it('renders complements group when analogous complementary colors are available', () => {
     const mock_onAddColor = vi.fn();
@@ -113,15 +149,24 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.getByText('hue_names.complements')).toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
 
     const complementaryButton = screen.getByRole('button', {
       name: complementary.hex,
     });
     fireEvent.click(complementaryButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('analogous', complementary);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'analogous',
+      expect.objectContaining({
+        lightness: complementary.lightness,
+        harmonizedChroma: complementary.harmonizedChroma,
+        hue: complementary.hue,
+      })
+    );
   });
   it('renders achromatic group when achromatic colors are available', () => {
     const mock_onAddColor = vi.fn();
@@ -132,15 +177,24 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.queryByText('hue_names.complements')).not.toBeInTheDocument();
-    expect(screen.getByText('hue_names.achromatic')).toBeInTheDocument();
-    expect(screen.queryByText('hue_names.hues')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.complements')
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.achromatic')).toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
 
     const achromaticButton = screen.getByRole('button', {
       name: grey.hex,
     });
     fireEvent.click(achromaticButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('achromatic', grey);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'achromatic',
+      expect.objectContaining({
+        lightness: grey.lightness,
+        harmonizedChroma: grey.harmonizedChroma,
+        hue: grey.hue,
+      })
+    );
   });
   it('renders hues group when hue colors are available', () => {
     const mock_onAddColor = vi.fn();
@@ -153,24 +207,49 @@ describe('SuggestedColors', () => {
     render(
       <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
     );
-    expect(screen.queryByText('hue_names.complements')).not.toBeInTheDocument();
-    expect(screen.queryByText('hue_names.achromatic')).not.toBeInTheDocument();
-    expect(screen.getByText('hue_names.hues')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.complements')
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('color_names.hues')).toBeInTheDocument();
 
     const redButton = screen.getByRole('button', {
       name: red.hex,
     });
     fireEvent.click(redButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('red', red);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'red',
+      expect.objectContaining({
+        lightness: red.lightness,
+        harmonizedChroma: red.harmonizedChroma,
+        hue: red.hue,
+      })
+    );
 
     const greenButton = screen.getByRole('button', {
       name: green.hex,
     });
     fireEvent.click(greenButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('green', green);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'green',
+      expect.objectContaining({
+        lightness: green.lightness,
+        harmonizedChroma: green.harmonizedChroma,
+        hue: green.hue,
+      })
+    );
 
     const blueButton = screen.getByRole('button', { name: blue.hex });
     fireEvent.click(blueButton);
-    expect(mock_onAddColor).toHaveBeenCalledWith('blue', blue);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'blue',
+      expect.objectContaining({
+        lightness: blue.lightness,
+        harmonizedChroma: blue.harmonizedChroma,
+        hue: blue.hue,
+      })
+    );
   });
 });

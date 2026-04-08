@@ -21,7 +21,7 @@ export const CustomColor = ({ initialColor, onSubmit }: CustomColorProps) => {
         size={200}
       />
       <div className="flex flex-col">
-        <OkLabel htmlFor="hue-input">{t('color_picker.hue')}</OkLabel>
+        <OkLabel htmlFor="hue-input">{t('color_pickers.hue')}</OkLabel>
         <OkInput
           id="hue-input"
           value={color.hue?.toFixed(1) ?? 0}
@@ -32,7 +32,7 @@ export const CustomColor = ({ initialColor, onSubmit }: CustomColorProps) => {
         />
       </div>
       <OkButton onClick={() => onSubmit('color', color)}>
-        {t('palette.add_color')}
+        {t('color_pickers.add_color')}
       </OkButton>
     </div>
   );

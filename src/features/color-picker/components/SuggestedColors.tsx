@@ -38,9 +38,9 @@ export const SuggestedColors = ({
   );
 
   const colorGroupSections: ColorGroupSection[] = [
-    { key: t('hue_names.complements'), groups: complements },
-    { key: t('hue_names.achromatic'), groups: achromatic },
-    { key: t('hue_names.hues'), groups: hues },
+    { key: t('color_names.complements'), groups: complements },
+    { key: t('color_names.achromatic'), groups: achromatic },
+    { key: t('color_names.hues'), groups: hues },
   ].filter((section) => section.groups.length > 0);
 
   return (

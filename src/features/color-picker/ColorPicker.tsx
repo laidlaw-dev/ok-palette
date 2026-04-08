@@ -1,13 +1,13 @@
 import { usePalette } from '@/stores/palette';
-import { filterAvailableColors } from '../utils/filter-available-colors';
-import { NewColorForm } from './NewColorForm';
+import { filterAvailableColors } from './utils/filter-available-colors';
+import { NewColorForm } from './components/NewColorForm';
 import type { OkColor } from '@/domain/color/ok-color';
 import { useState } from 'react';
 import { OkDialog } from '@/components/ui/OkDialog';
 import { useTranslation } from 'react-i18next';
-import { SuggestedColors } from './SuggestedColors';
+import { SuggestedColors } from './components/SuggestedColors';
 import { OkTitle } from '@/components/ui';
-import { CustomColor } from './CustomColor';
+import { CustomColor } from './components/CustomColor';
 
 export const ColorPicker = () => {
   const { t } = useTranslation();
@@ -38,9 +38,9 @@ export const ColorPicker = () => {
   return (
     <>
       <div className="border-control-border flex h-full min-h-0 w-62 flex-col gap-4 border-r p-2">
-        <OkTitle>{t('palette.custom_color')}</OkTitle>
+        <OkTitle>{t('color_pickers.custom_color')}</OkTitle>
         <CustomColor initialColor={primaryColor} onSubmit={handleAddColor} />
-        <OkTitle>{t('color_picker.suggested_colors')}</OkTitle>
+        <OkTitle>{t('color_pickers.suggested_colors')}</OkTitle>
         <div className="flex-1 overflow-y-auto">
           <SuggestedColors
             colorGroups={colorGroups}
@@ -51,11 +51,9 @@ export const ColorPicker = () => {
       <OkDialog isOpen={!!dialogData} onClose={() => setDialogData(null)}>
         <NewColorForm
           baseName={
-            dialogData ? t(`hue_names.${dialogData.name}`).toLowerCase() : ''
+            dialogData ? t(`color_names.${dialogData.name}`).toLowerCase() : ''
           }
-          usedNames={generatedPalette.allColors.map(
-            (c) => c.name ?? t(`hue_names.primary`)
-          )}
+          usedNames={generatedPalette.allColors.map((c) => c.name)}
           onClose={() => setDialogData(null)}
           onSubmit={handleSubmitNewColor}
         />

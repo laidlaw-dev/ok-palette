@@ -3,26 +3,22 @@
     "select": "Select",
     "cancel": "Cancel"
   },
-  "color_picker": {
+  "color_pickers": {
     "hex": "Hex",
     "red": "Red",
     "green": "Green",
     "blue": "Blue",
     "hue": "Hue",
     "current_color": "Current Color",
-    "suggested_colors": "Suggested Colors"
+    "suggested_colors": "Suggested Colors",
+    "custom_color": "Custom Color",
+    "add_color": "Add Color",
+    "color_name": "Color name"
   },
   "initial_setup": {
     "title": "Primary color"
   },
-  "palette": {
-    "default_palette_name": "Default",
-    "default_color_name": "primary",
-    "add_color": "Add Color",
-    "color_name": "Color name",
-    "custom_color": "Custom Color"
-  },
-  "hue_names": {
+  "color_names": {
     "color": "Color",
     "complements": "Complements",
     "hues": "Hues",

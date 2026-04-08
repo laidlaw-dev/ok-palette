@@ -4,7 +4,7 @@ import type { Palette, PaletteColor, PaletteColorSet } from './palette-types';
 type GeneratedPaletteColors = {
   allColors: {
     id: string;
-    name?: string;
+    name: string;
     color: OkColor;
   }[];
   colorSets: {

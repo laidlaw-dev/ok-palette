@@ -32,7 +32,7 @@ export const InitialColorDialog = () => {
       <RgbColorPicker initialColor={color} onColorChange={setColor} />
       <OkButton
         onClick={() => {
-          initialize(t('hue_names.primary').toLowerCase(), color);
+          initialize(t('color_names.primary').toLowerCase(), color);
         }}
       >
         {t('common.select')}

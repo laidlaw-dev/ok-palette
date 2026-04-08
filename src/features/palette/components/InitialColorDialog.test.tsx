@@ -23,7 +23,7 @@ describe('InitialColorDialog', () => {
     fireEvent.click(selectButton);
 
     expect(mock_initialize).toHaveBeenCalledWith(
-      'hue_names.primary',
+      'color_names.primary',
       expect.objectContaining({
         lightness: newColor.lightness,
         hue: newColor.hue,

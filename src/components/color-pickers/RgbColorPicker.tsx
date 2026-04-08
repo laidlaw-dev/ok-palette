@@ -58,11 +58,11 @@ export const RgbColorPicker = ({
         className="border-control-border w-24 rounded border"
         style={{ backgroundColor: currentColor.hex }}
         role="img"
-        aria-label={t('color_picker.current_color')}
+        aria-label={t('color_pickers.current_color')}
       />
       <div className="flex w-96 flex-col gap-4">
         <div className="flex flex-col">
-          <OkLabel htmlFor="hex-input">{t('color_picker.hex')}</OkLabel>
+          <OkLabel htmlFor="hex-input">{t('color_pickers.hex')}</OkLabel>
           <HexInput
             key={currentColor.hexKey} // Force re-mount to reset internal state when hex changes
             id="hex-input"
@@ -71,19 +71,19 @@ export const RgbColorPicker = ({
           />
         </div>
         <RgbSlider
-          label={t('color_picker.red')}
+          label={t('color_pickers.red')}
           channel="r"
           value={currentColor.rgb.r}
           onChange={handleRgbChange}
         />
         <RgbSlider
-          label={t('color_picker.green')}
+          label={t('color_pickers.green')}
           channel="g"
           value={currentColor.rgb.g}
           onChange={handleRgbChange}
         />
         <RgbSlider
-          label={t('color_picker.blue')}
+          label={t('color_pickers.blue')}
           channel="b"
           value={currentColor.rgb.b}
           onChange={handleRgbChange}

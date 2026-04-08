@@ -15,12 +15,12 @@ describe('CustomColor', () => {
     );
 
     const hueInput = screen.getByLabelText(
-      /color_picker.hue/i
+      /color_pickers.hue/i
     ) as HTMLInputElement;
     fireEvent.change(hueInput, { target: { value: '90' } });
 
     const submitButton = screen.getByRole('button', {
-      name: /palette.add_color/i,
+      name: /color_pickers.add_color/i,
     });
     fireEvent.click(submitButton);
 
@@ -60,7 +60,7 @@ describe('CustomColor', () => {
     fireEvent.mouseDown(hueWheelElement, { clientX: 95, clientY: 50 });
 
     const submitButton = screen.getByRole('button', {
-      name: /palette.add_color/i,
+      name: /color_pickers.add_color/i,
     });
     fireEvent.click(submitButton);
 

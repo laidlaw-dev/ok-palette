@@ -57,9 +57,9 @@ export const NewColorForm = ({
 
   return (
     <div className="flex flex-col gap-4">
-      <OkTitle>{t('palette.add_color')}</OkTitle>
+      <OkTitle>{t('color_pickers.add_color')}</OkTitle>
       <div className="flex flex-col gap-1">
-        <OkLabel htmlFor="color-name">{t('palette.color_name')}</OkLabel>
+        <OkLabel htmlFor="color-name">{t('color_pickers.color_name')}</OkLabel>
         <OkInput
           ref={inputRef}
           id="color-name"
@@ -72,7 +72,9 @@ export const NewColorForm = ({
       </div>
       <div className="flex justify-end gap-4 pt-2">
         <OkButton onClick={onClose}>{t('common.cancel')}</OkButton>
-        <OkButton onClick={handleSubmit}>{t('palette.add_color')}</OkButton>
+        <OkButton onClick={handleSubmit}>
+          {t('color_pickers.add_color')}
+        </OkButton>
       </div>
     </div>
   );

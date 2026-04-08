@@ -15,21 +15,21 @@ describe('RgbColorPicker', () => {
     );
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${initialColor.hex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue('#aa2277');
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(redInput).toHaveValue(Math.round(MAX_CHANNEL_VALUE * initialRgb.r));
@@ -39,13 +39,13 @@ describe('RgbColorPicker', () => {
     expect(blueInput).toHaveValue(Math.round(MAX_CHANNEL_VALUE * initialRgb.b));
 
     const redSlider = screen.getByRole('slider', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
     const greenSlider = screen.getByRole('slider', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
     const blueSlider = screen.getByRole('slider', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(redSlider).toHaveValue(
@@ -72,22 +72,22 @@ describe('RgbColorPicker', () => {
     const newHex = '#88aa77';
     const expectedRgb = OkColor.fromHex(newHex).rgb;
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     fireEvent.change(hexInput, { target: { value: newHex } });
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${newHex}`);
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(redInput).toHaveValue(Math.round(MAX_CHANNEL_VALUE * expectedRgb.r));
@@ -114,22 +114,22 @@ describe('RgbColorPicker', () => {
     const newHex = '#8a7';
     const expectedRgb = OkColor.fromHex(newHex).rgb;
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     fireEvent.change(hexInput, { target: { value: newHex } });
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${newHex}`);
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(redInput).toHaveValue(Math.round(MAX_CHANNEL_VALUE * expectedRgb.r));
@@ -155,22 +155,22 @@ describe('RgbColorPicker', () => {
       />
     );
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     fireEvent.change(hexInput, { target: { value: 'invalid' } });
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${initialColor.hex}`);
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(redInput).toHaveValue(Math.round(MAX_CHANNEL_VALUE * initialRgb.r));
@@ -193,7 +193,7 @@ describe('RgbColorPicker', () => {
     );
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
 
     fireEvent.change(redInput, { target: { value: 128 } });
@@ -201,15 +201,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#802277';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const redSlider = screen.getByRole('slider', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
 
     expect(redSlider).toHaveValue(String(128));
@@ -230,7 +230,7 @@ describe('RgbColorPicker', () => {
     );
 
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
 
     fireEvent.change(greenInput, { target: { value: 128 } });
@@ -238,15 +238,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#aa8077';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const greenSlider = screen.getByRole('slider', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
 
     expect(greenSlider).toHaveValue(String(128));
@@ -267,7 +267,7 @@ describe('RgbColorPicker', () => {
     );
 
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     fireEvent.change(blueInput, { target: { value: 128 } });
@@ -275,15 +275,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#aa2280';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const blueSlider = screen.getByRole('slider', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(blueSlider).toHaveValue(String(128));
@@ -304,7 +304,7 @@ describe('RgbColorPicker', () => {
     );
 
     const redSlider = screen.getByRole('slider', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
 
     fireEvent.change(redSlider, { target: { value: 128 } });
@@ -312,15 +312,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#802277';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const redInput = screen.getByRole('spinbutton', {
-      name: /color_picker.red/i,
+      name: /color_pickers.red/i,
     });
 
     expect(redInput).toHaveValue(128);
@@ -341,7 +341,7 @@ describe('RgbColorPicker', () => {
     );
 
     const greenSlider = screen.getByRole('slider', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
 
     fireEvent.change(greenSlider, { target: { value: 128 } });
@@ -349,15 +349,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#aa8077';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const greenInput = screen.getByRole('spinbutton', {
-      name: /color_picker.green/i,
+      name: /color_pickers.green/i,
     });
 
     expect(greenInput).toHaveValue(128);
@@ -378,7 +378,7 @@ describe('RgbColorPicker', () => {
     );
 
     const blueSlider = screen.getByRole('slider', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     fireEvent.change(blueSlider, { target: { value: 128 } });
@@ -386,15 +386,15 @@ describe('RgbColorPicker', () => {
     const expectedHex = '#aa2280';
 
     const colorPreview = screen.getByRole('img', {
-      name: /color_picker.current_color/i,
+      name: /color_pickers.current_color/i,
     });
     expect(colorPreview).toHaveStyle(`background-color: ${expectedHex}`);
 
-    const hexInput = screen.getByLabelText(/color_picker.hex/i);
+    const hexInput = screen.getByLabelText(/color_pickers.hex/i);
     expect(hexInput).toHaveValue(expectedHex);
 
     const blueInput = screen.getByRole('spinbutton', {
-      name: /color_picker.blue/i,
+      name: /color_pickers.blue/i,
     });
 
     expect(blueInput).toHaveValue(128);

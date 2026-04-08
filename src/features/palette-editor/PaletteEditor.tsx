@@ -1,5 +1,5 @@
 import { usePalette } from '@/stores/palette';
-import { ColorPicker } from './components/ColorPicker';
+import { ColorPicker } from '@/features/color-picker';
 import { ColorsBar } from './components/ColorsBar';
 
 export const PaletteEditor = () => {

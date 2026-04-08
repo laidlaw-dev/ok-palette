@@ -19,7 +19,8 @@
     "default_palette_name": "Default",
     "default_color_name": "primary",
     "add_color": "Add Color",
-    "color_name": "Color name"
+    "color_name": "Color name",
+    "custom_color": "Custom Color"
   },
   "hue_names": {
     "color": "Color",

@@ -1,6 +1,5 @@
 import { RgbColorPicker } from '@/components/color-pickers';
 import { OkButton, OkTitle } from '@/components/ui';
-import { OkColor } from '@/domain/color';
 import { usePalette } from '@/stores/palette/usePalette';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -24,15 +23,16 @@ import { useTranslation } from 'react-i18next';
  */
 export const InitialColorDialog = () => {
   const { t } = useTranslation();
-  const [color, setColor] = useState(OkColor.fromRgb({ r: 0, g: 0.7, b: 0.9 }));
-  const { initialize } = usePalette();
+  const { primaryColor, initialize } = usePalette();
+  const [color, setColor] = useState(primaryColor.copyWith({}));
+
   return (
     <div className="border-control-border flex flex-col gap-4 rounded border p-4">
       <OkTitle>{t('initial_setup.title')}</OkTitle>
       <RgbColorPicker initialColor={color} onColorChange={setColor} />
       <OkButton
         onClick={() => {
-          initialize(color);
+          initialize(t('hue_names.primary').toLowerCase(), color);
         }}
       >
         {t('common.select')}

@@ -13,6 +13,7 @@ describe('usePalette', () => {
       const { result } = renderHook(() => usePalette());
       act(() => {
         result.current.initialize(
+          'primary',
           new OkColor({
             hue: 120,
             lightness: 0.5,
@@ -26,6 +27,7 @@ describe('usePalette', () => {
       const { result } = renderHook(() => usePalette());
       act(() => {
         result.current.initialize(
+          'primary',
           new OkColor({
             hue: 120,
             lightness: 0.5,
@@ -37,7 +39,7 @@ describe('usePalette', () => {
       const palette = result.current.generatedPalette;
 
       const color = palette.allColors[0];
-      expect(color.name).toBeUndefined();
+      expect(color.name).toBe('primary');
       expect(
         new OkColor({
           hue: 120,
@@ -52,6 +54,7 @@ describe('usePalette', () => {
       const { result } = renderHook(() => usePalette());
       act(() => {
         result.current.initialize(
+          'primary',
           new OkColor({
             hue: 120,
             lightness: 0.5,

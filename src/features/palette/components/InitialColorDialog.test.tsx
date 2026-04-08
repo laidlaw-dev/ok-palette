@@ -6,7 +6,8 @@ import { InitialColorDialog } from './InitialColorDialog';
 const mock_initialize = vi.fn();
 vi.mock('@/stores/palette/usePalette', () => ({
   usePalette: () => ({
-    initialize: (color: OkColor) => mock_initialize(color),
+    primaryColor: OkColor.fromHex('#05b2e5'),
+    initialize: (name: string, color: OkColor) => mock_initialize(name, color),
   }),
 }));
 
@@ -22,6 +23,7 @@ describe('InitialColorDialog', () => {
     fireEvent.click(selectButton);
 
     expect(mock_initialize).toHaveBeenCalledWith(
+      'hue_names.primary',
       expect.objectContaining({
         lightness: newColor.lightness,
         hue: newColor.hue,

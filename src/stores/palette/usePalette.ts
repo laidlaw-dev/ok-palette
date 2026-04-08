@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { usePaletteStore } from './palette-store';
 import { generatePaletteColors } from '@/stores/palette/generate-palette-colors';
+import type { OkColor } from '@/domain/color';
 
 /**
  * Hook for managing and accessing palette state and generated colors.
@@ -15,6 +16,10 @@ import { generatePaletteColors } from '@/stores/palette/generate-palette-colors'
  */
 export const usePalette = () => {
   const palettes = usePaletteStore((state) => state);
+
+  const initialize = (name: string, primaryColor: OkColor) => {
+    palettes.initialize(name, primaryColor);
+  };
 
   const generatedPalette = useMemo(() => {
     const selectedPalette = palettes.palettes.find(
@@ -34,7 +39,8 @@ export const usePalette = () => {
 
   return {
     isInitialized: palettes.selectedPaletteId !== '',
-    initialize: palettes.initialize,
+    primaryColor: palettes.primaryColor,
+    initialize: initialize,
     addColor: palettes.addColor,
     generatedPalette,
   };

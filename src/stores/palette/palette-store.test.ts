@@ -21,12 +21,14 @@ describe('PaletteStore', () => {
         harmonizedChroma: 0.5,
       });
 
-      usePaletteStore.getState().initialize(initialColor);
+      usePaletteStore.getState().initialize('primary', initialColor);
 
       const result = usePaletteStore.getState();
 
+      expect(result.primaryColor.equals(initialColor)).toBe(true);
+
       expect(result.colors.length).toBe(1);
-      expect(result.colors[0].name).toBeUndefined();
+      expect(result.colors[0].name).toBe('primary');
       expect(result.colors[0].hue).toBe(initialColor.hue);
 
       expect(result.palettes.length).toBe(1);
@@ -47,7 +49,7 @@ describe('PaletteStore', () => {
         lightness: 0.5,
         harmonizedChroma: 0.5,
       });
-      usePaletteStore.getState().initialize(initialColor);
+      usePaletteStore.getState().initialize('primary', initialColor);
 
       const newColor = new OkColor({
         hue: 240,

@@ -12,21 +12,14 @@ import { OkButton, OkInput, OkTitle } from '@/components/ui';
 export const ColorPicker = () => {
   const { t } = useTranslation();
 
-  const { addColor, generatedPalette } = usePalette();
+  const { addColor, generatedPalette, primaryColor } = usePalette();
 
   const [dialogData, setDialogData] = useState<{
     name: string;
     color: OkColor;
   } | null>(null);
 
-  const [wheelColor, setWheelColor] = useState<OkColor>(
-    generatedPalette.allColors[0]?.color
-  );
-
-  const primaryColor = generatedPalette.allColors[0]?.color;
-  if (!primaryColor) {
-    return null;
-  }
+  const [wheelColor, setWheelColor] = useState<OkColor>(primaryColor);
 
   const colorGroups = filterAvailableColors(
     primaryColor,

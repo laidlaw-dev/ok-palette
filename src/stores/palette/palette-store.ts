@@ -1,11 +1,11 @@
-import type { OkColor } from '@/domain/color';
+import { OkColor } from '@/domain/color';
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
 import type { PaletteCollection } from './palette-types';
 
 type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
-  initialize: (primaryColor: OkColor) => void;
+  initialize: (name: string, primaryColor: OkColor) => void;
   addColor: (name: string, color: OkColor) => void;
   reset: () => void;
 };
@@ -15,6 +15,7 @@ type PaletteStore = PaletteCollection & {
  *
  * @returns {PaletteStore} The palette store object with state and actions
  *
+ * @property {OkColor} primaryColor - The primary color of the palette
  * @property {Color[]} colors - Array of color objects in the store
  * @property {Palette[]} palettes - Array of palette objects
  * @property {ColorSet[]} colorSets - Array of color set objects
@@ -26,17 +27,19 @@ type PaletteStore = PaletteCollection & {
  * @method reset - Resets the store to its initial state
  */
 export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
+  primaryColor: OkColor.fromHex('#05b2e5'),
   colors: [],
   palettes: [],
   colorSets: [],
   selectedPaletteId: '',
-  initialize: (primaryColor) => {
+  initialize: (name, primaryColor) => {
     const paletteId = nanoid();
     set({
+      primaryColor: primaryColor.copyWith({}),
       colors: [
         {
           id: nanoid(),
-          name: undefined,
+          name: name,
           hue: primaryColor.hue,
         },
       ],

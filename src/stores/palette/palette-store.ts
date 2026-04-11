@@ -7,6 +7,7 @@ type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
   initialize: (name: string, primaryColor: OkColor) => void;
   addColor: (name: string, color: OkColor) => void;
+  removeColor: (colorId: string) => void;
   reset: () => void;
 };
 
@@ -61,6 +62,11 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
       const newColor = { id: nanoid(), name, hue: color.hue };
       return { colors: [...state.colors, newColor] };
     });
+  },
+  removeColor: (colorId) => {
+    set((state) => ({
+      colors: state.colors.filter((color) => color.id !== colorId),
+    }));
   },
   reset: () => {
     set(store.getInitialState());

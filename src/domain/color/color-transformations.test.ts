@@ -349,6 +349,17 @@ describe('generateComplementaryColors', () => {
     });
     const complementaryColors = generateComplementaryColors(baseColor);
 
+    expect(complementaryColors.primary).toHaveLength(1);
+    expect(
+      complementaryColors.primary[0].equals(
+        new OkColor({
+          lightness: 0.7,
+          harmonizedChroma: 0.7,
+          hue: 180, // original color
+        })
+      )
+    ).toBe(true);
+
     expect(complementaryColors.complementary).toHaveLength(1);
     expect(
       complementaryColors.complementary[0].equals(

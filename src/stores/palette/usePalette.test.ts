@@ -81,4 +81,48 @@ describe('usePalette', () => {
       expect(addedColor?.name).toBe('test_color');
     });
   });
+  describe('removeColor', () => {
+    it('removes a color from the store and it is no longer in the generated palette', () => {
+      const { result } = renderHook(() => usePalette());
+      act(() => {
+        result.current.initialize(
+          'primary',
+          new OkColor({
+            hue: 120,
+            lightness: 0.5,
+            harmonizedChroma: 0.5,
+          })
+        );
+      });
+
+      const newColor = new OkColor({
+        hue: 240,
+        lightness: 0.5,
+        harmonizedChroma: 0.5,
+      });
+      act(() => {
+        result.current.addColor('test_color', newColor);
+      });
+
+      let palette = result.current.generatedPalette;
+
+      const addedColor = palette.allColors.find((c) =>
+        c.color.equals(newColor)
+      );
+      expect(addedColor).toBeDefined();
+
+      act(() => {
+        if (addedColor) {
+          result.current.removeColor(addedColor.id);
+        }
+      });
+
+      palette = result.current.generatedPalette;
+
+      const removedColor = palette.allColors.find((c) =>
+        c.color.equals(newColor)
+      );
+      expect(removedColor).toBeUndefined();
+    });
+  });
 });

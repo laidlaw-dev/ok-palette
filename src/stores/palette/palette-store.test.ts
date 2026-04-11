@@ -65,4 +65,29 @@ describe('PaletteStore', () => {
       expect(result.colors[1].hue).toBe(newColor.hue);
     });
   });
+  describe('removeColor', () => {
+    it('removes a color from the store by id', () => {
+      const initialColor = new OkColor({
+        hue: 120,
+        lightness: 0.5,
+        harmonizedChroma: 0.5,
+      });
+      usePaletteStore.getState().initialize('primary', initialColor);
+
+      const newColor = new OkColor({
+        hue: 240,
+        lightness: 0.5,
+        harmonizedChroma: 0.5,
+      });
+      usePaletteStore.getState().addColor('New Color', newColor);
+
+      const colorIdToRemove = usePaletteStore.getState().colors[0].id;
+      usePaletteStore.getState().removeColor(colorIdToRemove);
+
+      const result = usePaletteStore.getState();
+
+      expect(result.colors.length).toBe(1);
+      expect(result.colors[0].id).not.toBe(colorIdToRemove);
+    });
+  });
 });

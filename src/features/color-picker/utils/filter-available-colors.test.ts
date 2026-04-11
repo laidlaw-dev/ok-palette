@@ -17,6 +17,27 @@ const primary = new OkColor({
 });
 
 describe('filterAvailableColors', () => {
+  it('adds primary when primary is available', () => {
+    const expectedComplementary =
+      generateComplementaryColors(primary).primary[0];
+
+    const usedColors: OkColor[] = [];
+
+    const result = filterAvailableColors(primary, usedColors);
+
+    const primaryGroup = result.find((group) => group.key === 'primary');
+    expect(primaryGroup).toBeDefined();
+    expect(primaryGroup?.colors.length).toBe(1);
+    expect(primaryGroup?.colors[0].equals(expectedComplementary)).toBe(true);
+  });
+  it('does not add primary when primary is already used', () => {
+    const usedColors: OkColor[] = [primary];
+
+    const result = filterAvailableColors(primary, usedColors);
+
+    const primaryGroup = result.find((group) => group.key === 'primary');
+    expect(primaryGroup).toBeUndefined();
+  });
   it('adds complementary when complementary is available', () => {
     const expectedComplementary =
       generateComplementaryColors(primary).complementary[0];

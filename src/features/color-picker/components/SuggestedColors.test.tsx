@@ -56,6 +56,34 @@ describe('SuggestedColors', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
   });
+  it('renders complements group and button when primary colors are available', () => {
+    const mock_onAddColor = vi.fn();
+    const colorGroups: AvailableColorGroup[] = [
+      { key: 'primary', colors: [complementary] },
+    ];
+
+    render(
+      <SuggestedColors colorGroups={colorGroups} onAddColor={mock_onAddColor} />
+    );
+    expect(screen.getByText('color_names.complements')).toBeInTheDocument();
+    expect(
+      screen.queryByText('color_names.achromatic')
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('color_names.hues')).not.toBeInTheDocument();
+
+    const complementaryButton = screen.getByRole('button', {
+      name: complementary.hex,
+    });
+    fireEvent.click(complementaryButton);
+    expect(mock_onAddColor).toHaveBeenCalledWith(
+      'primary',
+      expect.objectContaining({
+        lightness: complementary.lightness,
+        harmonizedChroma: complementary.harmonizedChroma,
+        hue: complementary.hue,
+      })
+    );
+  });
   it('renders complements group and button when complementary colors are available', () => {
     const mock_onAddColor = vi.fn();
     const colorGroups: AvailableColorGroup[] = [

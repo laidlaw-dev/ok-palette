@@ -25,6 +25,7 @@ export const generateComplementaryColors = (color: OkColor) => {
   );
 
   return {
+    primary: [color.copyWith({})],
     complementary: [color.copyWithRotation(180)],
     split: [color.copyWithRotation(-150), color.copyWithRotation(150)],
     triadic: [color.copyWithRotation(-120), color.copyWithRotation(120)],

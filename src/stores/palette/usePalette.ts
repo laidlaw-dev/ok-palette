@@ -43,6 +43,10 @@ export const usePalette = () => {
     initialize: initialize,
     addColor: palettes.addColor,
     removeColor: palettes.removeColor,
+    addColorSet: palettes.addColorSet,
+    removeColorSet: palettes.removeColorSet,
+    addColorToSet: palettes.addColorToSet,
+    removeColorFromSet: palettes.removeColorFromSet,
     generatedPalette,
   };
 };

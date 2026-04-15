@@ -283,6 +283,8 @@ describe('generatePaletteColors', () => {
     expect(result.colorSets.length).toBe(1);
 
     const colorSet1 = result.colorSets[0];
+    expect(colorSet1.id).toBe('1');
+    expect(colorSet1.name).toBe('collection_1');
     expect(colorSet1.lightness).toBe(collectionLightness);
     expect(colorSet1.chroma).toBe(collectionChroma);
     expect(colorSet1.colors.length).toBe(3);
@@ -347,6 +349,8 @@ describe('generatePaletteColors', () => {
     expect(result.colorSets.length).toBe(1);
 
     const colorSet1 = result.colorSets[0];
+    expect(colorSet1.id).toBe('1');
+    expect(colorSet1.name).toBe('collection_1');
     expect(colorSet1.lightness).toBe(collectionLightness);
     expect(colorSet1.chroma).toBe(collectionChroma);
     expect(colorSet1.colors.length).toBe(3);

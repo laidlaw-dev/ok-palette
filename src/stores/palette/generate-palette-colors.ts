@@ -8,6 +8,8 @@ type GeneratedPaletteColors = {
     color: OkColor;
   }[];
   colorSets: {
+    id: string;
+    name: string;
     lightness: Lightness;
     chroma: Chroma;
     colors: {
@@ -84,6 +86,8 @@ export const generatePaletteColors = ({
       };
     });
     return {
+      id: colorSet.id,
+      name: colorSet.name,
       lightness: paletteColorSet.lightness,
       chroma: paletteColorSet.chroma,
       colors,

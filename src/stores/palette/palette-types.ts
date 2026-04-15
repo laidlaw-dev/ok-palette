@@ -6,20 +6,26 @@ export type PaletteColor = {
   hue: Hue;
 };
 
+export type ColorSetType = 'default' | 'surface' | 'text' | 'border';
+
 export type PaletteColorSet = {
   id: string;
   name: string;
+  colorIds: string[];
+};
+
+export type ColorSetValues = {
+  colorSetId: string;
   lightness: Lightness;
   chroma: Chroma;
-  colorIds: string[];
 };
 
 export type Palette = {
   id: string;
   name?: string;
-  defaultLightness: Lightness;
-  defaultChroma: Chroma;
-  colorSetIds: string[];
+  baseLightness: Lightness;
+  baseChroma: Chroma;
+  colorSetValues: ColorSetValues[];
 };
 
 export type PaletteCollection = {

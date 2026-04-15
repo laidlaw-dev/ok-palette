@@ -1,13 +1,20 @@
-import { OkColor } from '@/domain/color';
+import {
+  asChroma,
+  asLightness,
+  OkColor,
+  type Chroma,
+  type Lightness,
+} from '@/domain/color';
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
-import type { PaletteCollection } from './palette-types';
+import type { ColorSetType, PaletteCollection } from './palette-types';
 
 type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
   initialize: (name: string, primaryColor: OkColor) => void;
   addColor: (name: string, color: OkColor) => void;
   removeColor: (colorId: string) => void;
+  addColorSet: (name: string, type: ColorSetType) => void;
   reset: () => void;
 };
 
@@ -48,9 +55,9 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
         {
           id: paletteId,
           name: undefined,
-          defaultLightness: primaryColor.lightness,
-          defaultChroma: primaryColor.harmonizedChroma,
-          colorSetIds: [],
+          baseLightness: primaryColor.lightness,
+          baseChroma: primaryColor.harmonizedChroma,
+          colorSetValues: [],
         },
       ],
       colorSets: [],
@@ -66,9 +73,53 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
   removeColor: (colorId) => {
     set((state) => ({
       colors: state.colors.filter((color) => color.id !== colorId),
+      colorSets: state.colorSets.map((colorSet) => ({
+        ...colorSet,
+        colorIds: colorSet.colorIds.filter((id) => id !== colorId),
+      })),
     }));
+  },
+  addColorSet: (name, type) => {
+    set((state) => {
+      const id = nanoid();
+      const newColorSet = {
+        id: id,
+        name,
+        colorIds: [],
+      };
+      return {
+        colorSets: [...state.colorSets, newColorSet],
+        palettes: state.palettes.map((palette) => ({
+          ...palette,
+          colorSetValues: [
+            ...palette.colorSetValues,
+            {
+              colorSetId: id,
+              ...getDefaultColorSetValues(type),
+            },
+          ],
+        })),
+      };
+    });
   },
   reset: () => {
     set(store.getInitialState());
   },
 }));
+
+const getDefaultColorSetValues = (
+  type: ColorSetType
+): { lightness: Lightness; chroma: Chroma } => {
+  switch (type) {
+    case 'default':
+      return { lightness: asLightness(0.5), chroma: asChroma(0.5) };
+    case 'surface':
+      return { lightness: asLightness(0.9), chroma: asChroma(0.1) };
+    case 'text':
+      return { lightness: asLightness(0.1), chroma: asChroma(0.1) };
+    case 'border':
+      return { lightness: asLightness(0.7), chroma: asChroma(0.3) };
+    default:
+      return { lightness: asLightness(0.5), chroma: asChroma(0.5) };
+  }
+};

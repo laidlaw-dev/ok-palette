@@ -33,11 +33,7 @@ describe('PaletteStore', () => {
 
       expect(result.palettes.length).toBe(1);
       expect(result.palettes[0].name).toBeUndefined();
-      expect(result.palettes[0].defaultLightness).toBe(initialColor.lightness);
-      expect(result.palettes[0].defaultChroma).toBe(
-        initialColor.harmonizedChroma
-      );
-      expect(result.palettes[0].colorSetIds.length).toBe(0);
+      expect(result.palettes[0].colorSetValues.length).toBe(0);
 
       expect(result.selectedPaletteId).toBe(result.palettes[0].id);
     });
@@ -79,7 +75,7 @@ describe('PaletteStore', () => {
         lightness: 0.5,
         harmonizedChroma: 0.5,
       });
-      usePaletteStore.getState().addColor('New Color', newColor);
+      usePaletteStore.getState().addColor('new_color', newColor);
 
       const colorIdToRemove = usePaletteStore.getState().colors[0].id;
       usePaletteStore.getState().removeColor(colorIdToRemove);

@@ -55,21 +55,25 @@ export const generatePaletteColors = ({
     id: color.id,
     name: color.name,
     color: new OkColor({
-      lightness: palette.defaultLightness,
-      harmonizedChroma: palette.defaultChroma,
+      lightness: palette.baseLightness,
+      harmonizedChroma: palette.baseChroma,
       hue: color.hue,
     }),
   }));
   // Color sets
   const generatedColorSets = colorSets.map((colorSet) => {
+    const paletteColorSet = palette.colorSetValues.find(
+      (colorSetValue) => colorSetValue.colorSetId === colorSet.id
+    );
+    if (!paletteColorSet) return undefined;
     const colors = allColors.map((color) => {
       if (colorSet.colorIds.includes(color.id)) {
         return {
           id: color.id,
           name: color.name,
           color: new OkColor({
-            lightness: colorSet.lightness,
-            harmonizedChroma: colorSet.chroma,
+            lightness: paletteColorSet.lightness,
+            harmonizedChroma: paletteColorSet.chroma,
             hue: color.hue,
           }),
         };
@@ -80,14 +84,14 @@ export const generatePaletteColors = ({
       };
     });
     return {
-      lightness: colorSet.lightness,
-      chroma: colorSet.chroma,
+      lightness: paletteColorSet.lightness,
+      chroma: paletteColorSet.chroma,
       colors,
     };
   });
 
   return {
-    colorSets: generatedColorSets,
+    colorSets: generatedColorSets.filter((set) => set !== undefined),
     allColors: allGeneratedColors,
   };
 };

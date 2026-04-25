@@ -1,5 +1,10 @@
-import { OkColor, type Chroma, type Lightness } from '../../domain/color';
-import type { Palette, PaletteColor, PaletteColorSet } from './palette-types';
+import { OkColor } from '../../domain/color';
+import type {
+  GeneratedColorSet,
+  Palette,
+  PaletteColor,
+  PaletteColorSet,
+} from './palette-types';
 
 type GeneratedPaletteColors = {
   allColors: {
@@ -7,17 +12,7 @@ type GeneratedPaletteColors = {
     name: string;
     color: OkColor;
   }[];
-  colorSets: {
-    id: string;
-    name: string;
-    lightness: Lightness;
-    chroma: Chroma;
-    colors: {
-      id: string;
-      name?: string;
-      color?: OkColor;
-    }[];
-  }[];
+  colorSets: GeneratedColorSet[];
 };
 
 /**
@@ -69,20 +64,15 @@ export const generatePaletteColors = ({
     );
     if (!paletteColorSet) return undefined;
     const colors = allColors.map((color) => {
-      if (colorSet.colorIds.includes(color.id)) {
-        return {
-          id: color.id,
-          name: color.name,
-          color: new OkColor({
-            lightness: paletteColorSet.lightness,
-            harmonizedChroma: paletteColorSet.chroma,
-            hue: color.hue,
-          }),
-        };
-      }
       return {
         id: color.id,
         name: color.name,
+        color: new OkColor({
+          lightness: paletteColorSet.lightness,
+          harmonizedChroma: paletteColorSet.chroma,
+          hue: color.hue,
+        }),
+        isInSet: colorSet.colorIds.includes(color.id),
       };
     });
     return {

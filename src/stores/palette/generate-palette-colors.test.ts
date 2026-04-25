@@ -250,7 +250,7 @@ describe('generatePaletteColors', () => {
 
     expect(result.colorSets.length).toBe(0);
   });
-  it('generates collections with colors and undefined for missing colors', () => {
+  it('generates collections with colors', () => {
     const defaultLightness = asLightness(0.7);
     const defaultChroma = asChroma(0.8);
     const collectionLightness = asLightness(0.5);
@@ -297,13 +297,21 @@ describe('generatePaletteColors', () => {
         lightness: collectionLightness,
         harmonizedChroma: collectionChroma,
         hue: redHue,
-      }).equals(red.color!)
+      }).equals(red.color)
     ).toBe(true);
+    expect(red.isInSet).toBe(true);
 
     const green = colorSet1.colors[1];
     expect(green.id).toBe('2');
     expect(green.name).toBe('Green');
-    expect(green.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: greenHue,
+      }).equals(green.color)
+    ).toBe(true);
+    expect(green.isInSet).toBe(false);
 
     const blue = colorSet1.colors[2];
     expect(blue.id).toBe('3');
@@ -313,10 +321,11 @@ describe('generatePaletteColors', () => {
         lightness: collectionLightness,
         harmonizedChroma: collectionChroma,
         hue: blueHue,
-      }).equals(blue.color!)
+      }).equals(blue.color)
     ).toBe(true);
+    expect(blue.isInSet).toBe(true);
   });
-  it('generates collections with colors undefined when all colors are missing', () => {
+  it('generates collections with colors when all colors are missing', () => {
     const defaultLightness = asLightness(0.7);
     const defaultChroma = asChroma(0.8);
     const collectionLightness = asLightness(0.5);
@@ -358,16 +367,37 @@ describe('generatePaletteColors', () => {
     const red = colorSet1.colors[0];
     expect(red.id).toBe('1');
     expect(red.name).toBe('Red');
-    expect(red.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: redHue,
+      }).equals(red.color)
+    ).toBe(true);
+    expect(red.isInSet).toBe(false);
 
     const green = colorSet1.colors[1];
     expect(green.id).toBe('2');
     expect(green.name).toBe('Green');
-    expect(green.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: greenHue,
+      }).equals(green.color)
+    ).toBe(true);
+    expect(green.isInSet).toBe(false);
 
     const blue = colorSet1.colors[2];
     expect(blue.id).toBe('3');
     expect(blue.name).toBe('Blue');
-    expect(blue.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: blueHue,
+      }).equals(blue.color)
+    ).toBe(true);
+    expect(blue.isInSet).toBe(false);
   });
 });

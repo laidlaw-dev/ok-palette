@@ -34,3 +34,16 @@ export type PaletteCollection = {
   colorSets: PaletteColorSet[];
   palettes: Palette[];
 };
+
+export type GeneratedColorSet = {
+  id: string;
+  name: string;
+  lightness: Lightness;
+  chroma: Chroma;
+  colors: {
+    id: string;
+    name: string;
+    color: OkColor;
+    isInSet: boolean;
+  }[];
+};

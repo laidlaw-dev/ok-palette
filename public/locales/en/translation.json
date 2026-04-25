@@ -36,8 +36,19 @@
     "purple": "Purple",
     "pink": "Pink"
   },
+  "color_set": {
+    "add_color_set": "Add color set",
+    "name": "Color set name",
+    "type": "Color set type"
+  },
+  "color_set_types": {
+    "default": "Default",
+    "text": "Text",
+    "surface": "Surface",
+    "border": "Border"
+  },
   "validation": {
-    "required_color_name": "Color name is required",
-    "unique_color_name": "Name already in use"
+    "required_name": "Name is required",
+    "unique_name": "Name already in use"
   }
 }

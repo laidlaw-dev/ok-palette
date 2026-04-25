@@ -282,8 +282,8 @@ describe('usePalette', () => {
         (c) => c.id === colorId
       );
 
-      expect(colorInSet1?.color).toBeUndefined();
-      expect(colorInSet2?.color).toBeDefined();
+      expect(colorInSet1?.isInSet).toBe(false);
+      expect(colorInSet2?.isInSet).toBe(true);
     });
   });
 });

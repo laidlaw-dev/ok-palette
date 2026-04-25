@@ -44,9 +44,7 @@ describe('NewColorForm', () => {
     });
     fireEvent.click(addButton);
 
-    expect(
-      screen.getByText('validation.required_color_name')
-    ).toBeInTheDocument();
+    expect(screen.getByText('validation.required_name')).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -68,9 +66,7 @@ describe('NewColorForm', () => {
     });
     fireEvent.click(addButton);
 
-    expect(
-      screen.getByText('validation.unique_color_name')
-    ).toBeInTheDocument();
+    expect(screen.getByText('validation.unique_name')).toBeInTheDocument();
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
@@ -113,14 +109,12 @@ describe('NewColorForm', () => {
     });
     fireEvent.click(addButton);
 
-    expect(
-      screen.getByText('validation.unique_color_name')
-    ).toBeInTheDocument();
+    expect(screen.getByText('validation.unique_name')).toBeInTheDocument();
 
     fireEvent.change(input, { target: { value: 'color-2' } });
 
     expect(
-      screen.queryByText('validation.unique_color_name')
+      screen.queryByText('validation.unique_name')
     ).not.toBeInTheDocument();
   });
 

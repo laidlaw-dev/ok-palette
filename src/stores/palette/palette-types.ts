@@ -7,6 +7,7 @@ export type PaletteColor = {
 };
 
 export type ColorSetType = 'default' | 'surface' | 'text' | 'border';
+export type ColorSpaceParameter = 'lightness' | 'chroma';
 
 export type PaletteColorSet = {
   id: string;

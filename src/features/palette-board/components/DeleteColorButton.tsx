@@ -55,7 +55,7 @@ export const DeleteColorButton = ({
                 }
               )}
             >
-              <Minus size="inherit" />
+              <Minus size="2em" />
             </div>
           </button>
         );

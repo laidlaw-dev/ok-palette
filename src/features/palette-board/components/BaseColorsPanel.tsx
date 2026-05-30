@@ -13,6 +13,7 @@ export const BaseColorsPanel = ({
 }: BaseColorsPanelProps) => {
   return (
     <div className="flex gap-1">
+      <div className="w-8" />
       <AnimatePresence>
         {colors.map((color) => (
           <motion.div

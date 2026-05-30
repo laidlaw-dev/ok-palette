@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 
 import { usePalette } from './usePalette';
-import { OkColor } from '@/domain/color';
+import { asChroma, asLightness, OkColor } from '@/domain/color';
 
 describe('usePalette', () => {
   it('returns default values when not initialized', () => {
@@ -284,6 +284,72 @@ describe('usePalette', () => {
 
       expect(colorInSet1?.isInSet).toBe(false);
       expect(colorInSet2?.isInSet).toBe(true);
+    });
+  });
+  describe('setColorSetLightness', () => {
+    it('sets the lightness of a color set and it is reflected in the generated palette', () => {
+      const { result } = renderHook(() => usePalette());
+      act(() => {
+        result.current.initialize(
+          'primary',
+          new OkColor({
+            hue: 120,
+            lightness: 0.5,
+            harmonizedChroma: 0.5,
+          })
+        );
+      });
+
+      act(() => {
+        result.current.addColorSet('test_set_1', 'default');
+      });
+
+      const test_set_1_id = result.current.generatedPalette.colorSets[0].id;
+
+      act(() => {
+        result.current.setColorSetLightness(test_set_1_id, asLightness(0.8));
+      });
+
+      const updatedPalette = result.current.generatedPalette;
+
+      const colorSet = updatedPalette.colorSets.find(
+        (set) => set.id === test_set_1_id
+      );
+      expect(colorSet).toBeDefined();
+      expect(colorSet?.lightness).toBe(0.8);
+    });
+  });
+  describe('setColorSetChroma', () => {
+    it('sets the chroma of a color set and it is reflected in the generated palette', () => {
+      const { result } = renderHook(() => usePalette());
+      act(() => {
+        result.current.initialize(
+          'primary',
+          new OkColor({
+            hue: 120,
+            lightness: 0.5,
+            harmonizedChroma: 0.5,
+          })
+        );
+      });
+
+      act(() => {
+        result.current.addColorSet('test_set_1', 'default');
+      });
+
+      const test_set_1_id = result.current.generatedPalette.colorSets[0].id;
+
+      act(() => {
+        result.current.setColorSetChroma(test_set_1_id, asChroma(0.8));
+      });
+
+      const updatedPalette = result.current.generatedPalette;
+
+      const colorSet = updatedPalette.colorSets.find(
+        (set) => set.id === test_set_1_id
+      );
+      expect(colorSet).toBeDefined();
+      expect(colorSet?.chroma).toBe(0.8);
     });
   });
 });

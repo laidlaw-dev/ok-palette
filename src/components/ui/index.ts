@@ -3,6 +3,7 @@ export * from './OkLabel';
 export * from './OkTitle';
 export * from './buttons/OkButton';
 export * from './buttons/OkColorButton';
+export * from './buttons/OkIconButton';
 export * from './buttons/button-styles';
 export * from './sliders/OkColorSlider';
 export * from './sliders/OkHueWheel';

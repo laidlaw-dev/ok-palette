@@ -1,4 +1,4 @@
-import { OkColor } from '@/domain/color';
+import { asChroma, asLightness, OkColor } from '@/domain/color';
 import { usePaletteStore } from './palette-store';
 import {
   colorAlreadyInSetError,
@@ -429,6 +429,88 @@ describe('PaletteStore', () => {
       expect(() => {
         usePaletteStore.getState().removeColorFromSet(test_set_1_id, colorId);
       }).toThrow(colorNotInSetError(colorId, test_set_1_id));
+    });
+  });
+  describe('setColorSetLightness', () => {
+    it('sets the lightness of a color set and updates the generated palette colors for that set', () => {
+      const initialColor = new OkColor({
+        hue: 120,
+        lightness: 0.7,
+        harmonizedChroma: 0.95,
+      });
+      usePaletteStore.getState().initialize('primary', initialColor);
+
+      usePaletteStore.getState().addColorSet('test_set_1', 'default');
+      usePaletteStore.getState().addColorSet('test_set_2', 'default');
+
+      const test_set_2 = usePaletteStore.getState().colorSets[1];
+
+      usePaletteStore
+        .getState()
+        .setColorSetLightness(test_set_2.id, asLightness(0.2));
+
+      const updatedResult = usePaletteStore.getState();
+
+      const updatedColorSet = updatedResult.palettes[0].colorSetValues.find(
+        (value) => value.colorSetId === test_set_2.id
+      );
+      expect(updatedColorSet).toBeDefined();
+      expect(updatedColorSet?.lightness).toBe(0.2);
+    });
+    it('throws an error if color set does not exist', () => {
+      const initialColor = new OkColor({
+        hue: 120,
+        lightness: 0.7,
+        harmonizedChroma: 0.95,
+      });
+      usePaletteStore.getState().initialize('primary', initialColor);
+
+      expect(() => {
+        usePaletteStore
+          .getState()
+          .setColorSetLightness('non_existent_color_set_id', asLightness(0.5));
+      }).toThrow(colorSetNotFoundError('non_existent_color_set_id'));
+    });
+  });
+  describe('setColorSetChroma', () => {
+    it('sets the chroma of a color set and updates the generated palette colors for that set', () => {
+      const initialColor = new OkColor({
+        hue: 120,
+        lightness: 0.7,
+        harmonizedChroma: 0.95,
+      });
+      usePaletteStore.getState().initialize('primary', initialColor);
+
+      usePaletteStore.getState().addColorSet('test_set_1', 'default');
+      usePaletteStore.getState().addColorSet('test_set_2', 'default');
+
+      const test_set_2 = usePaletteStore.getState().colorSets[1];
+
+      usePaletteStore
+        .getState()
+        .setColorSetChroma(test_set_2.id, asChroma(0.5));
+
+      const updatedResult = usePaletteStore.getState();
+
+      const updatedColorSet = updatedResult.palettes[0].colorSetValues.find(
+        (value) => value.colorSetId === test_set_2.id
+      );
+      expect(updatedColorSet).toBeDefined();
+      expect(updatedColorSet?.chroma).toBe(0.5);
+    });
+    it('throws an error if color set does not exist', () => {
+      const initialColor = new OkColor({
+        hue: 120,
+        lightness: 0.7,
+        harmonizedChroma: 0.95,
+      });
+      usePaletteStore.getState().initialize('primary', initialColor);
+
+      expect(() => {
+        usePaletteStore
+          .getState()
+          .setColorSetChroma('non_existent_color_set_id', asChroma(0.5));
+      }).toThrow(colorSetNotFoundError('non_existent_color_set_id'));
     });
   });
 });

@@ -24,6 +24,8 @@ type PaletteStore = PaletteCollection & {
   removeColorSet: (colorSetId: string) => void;
   addColorToSet: (colorSetId: string, colorId: string) => void;
   removeColorFromSet: (colorSetId: string, colorId: string) => void;
+  setColorSetLightness: (colorSetId: string, lightness: Lightness) => void;
+  setColorSetChroma: (colorSetId: string, chroma: Chroma) => void;
   reset: () => void;
 };
 
@@ -169,6 +171,44 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
         ),
       };
     });
+  },
+  setColorSetLightness(colorSetId, lightness) {
+    set((state) => ({
+      palettes: state.palettes.map((palette) => {
+        if (palette.id !== state.selectedPaletteId) return palette;
+        const colorSet = palette.colorSetValues.find(
+          (set) => set.colorSetId === colorSetId
+        );
+        if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+        return {
+          ...palette,
+          colorSetValues: palette.colorSetValues.map((set) =>
+            set.colorSetId === colorSetId
+              ? { ...set, lightness: asLightness(lightness) }
+              : set
+          ),
+        };
+      }),
+    }));
+  },
+  setColorSetChroma(colorSetId, chroma) {
+    set((state) => ({
+      palettes: state.palettes.map((palette) => {
+        if (palette.id !== state.selectedPaletteId) return palette;
+        const colorSet = palette.colorSetValues.find(
+          (set) => set.colorSetId === colorSetId
+        );
+        if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+        return {
+          ...palette,
+          colorSetValues: palette.colorSetValues.map((set) =>
+            set.colorSetId === colorSetId
+              ? { ...set, chroma: asChroma(chroma) }
+              : set
+          ),
+        };
+      }),
+    }));
   },
   reset: () => {
     set(store.getInitialState());

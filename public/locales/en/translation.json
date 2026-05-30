@@ -13,7 +13,9 @@
     "suggested_colors": "Suggested Colors",
     "custom_color": "Custom Color",
     "add_color": "Add Color",
-    "color_name": "Color name"
+    "color_name": "Color name",
+    "lightness": "Lightness",
+    "chroma": "Chroma"
   },
   "initial_setup": {
     "title": "Primary color"
@@ -39,7 +41,8 @@
   "color_set": {
     "add_color_set": "Add color set",
     "name": "Color set name",
-    "type": "Color set type"
+    "type": "Color set type",
+    "delete_set": "Delete color set"
   },
   "color_set_types": {
     "default": "Default",

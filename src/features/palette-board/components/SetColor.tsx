@@ -52,6 +52,7 @@ export const SetColor = ({
                 borderColor: borderColor,
               }}
               onClick={isInUse ? onDeleteClick : onAddClick}
+              aria-label={color.hex}
             ></button>
           );
         }}

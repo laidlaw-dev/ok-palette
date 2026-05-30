@@ -47,6 +47,8 @@ export const usePalette = () => {
     removeColorSet: palettes.removeColorSet,
     addColorToSet: palettes.addColorToSet,
     removeColorFromSet: palettes.removeColorFromSet,
+    setColorSetLightness: palettes.setColorSetLightness,
+    setColorSetChroma: palettes.setColorSetChroma,
     generatedPalette,
   };
 };

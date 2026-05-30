@@ -29,8 +29,5 @@ export const validateColorName = (
   }
   const normalizedUsedNames = usedNames.map((name) => name.toLowerCase());
 
-  return (
-    !normalizedUsedNames.includes(normalizedName) &&
-    !(normalizedName === 'primary')
-  );
+  return !normalizedUsedNames.includes(normalizedName);
 };

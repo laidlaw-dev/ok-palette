@@ -38,9 +38,9 @@ export const NewColorForm = ({
         onSubmit(newName);
       } else {
         if (newName.trim() === '') {
-          setError(t('validation.required_color_name'));
+          setError(t('validation.required_name'));
         } else {
-          setError(t('validation.unique_color_name'));
+          setError(t('validation.unique_name'));
         }
       }
     }

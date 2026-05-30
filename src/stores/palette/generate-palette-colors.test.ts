@@ -25,9 +25,9 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(0),
-        defaultChroma: asChroma(0),
-        colorSetIds: [],
+        baseLightness: asLightness(0),
+        baseChroma: asChroma(0),
+        colorSetValues: [],
       },
       colorSets: [],
       allColors: [],
@@ -43,9 +43,9 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(defaultLightness),
-        defaultChroma: asChroma(defaultChroma),
-        colorSetIds: [],
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [],
       },
       colorSets: [],
       allColors: [...allColors],
@@ -102,30 +102,40 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(defaultLightness),
-        defaultChroma: asChroma(defaultChroma),
-        colorSetIds: ['1', '2', '3'],
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [
+          {
+            colorSetId: '1',
+            lightness: colorSetLightness[0],
+            chroma: colorSetChroma[0],
+          },
+          {
+            colorSetId: '2',
+            lightness: colorSetLightness[1],
+            chroma: colorSetChroma[1],
+          },
+          {
+            colorSetId: '3',
+            lightness: colorSetLightness[2],
+            chroma: colorSetChroma[2],
+          },
+        ],
       },
       colorSets: [
         {
           id: '1',
-          name: 'ColorSet_1',
-          lightness: colorSetLightness[0],
-          chroma: colorSetChroma[0],
+          name: 'color_set_1',
           colorIds: ['1', '3'],
         },
         {
           id: '2',
-          name: 'ColorSet_2',
-          lightness: colorSetLightness[1],
-          chroma: colorSetChroma[1],
+          name: 'color_set_2',
           colorIds: ['1', '2', '3'],
         },
         {
           id: '3',
-          name: 'ColorSet_3',
-          lightness: colorSetLightness[2],
-          chroma: colorSetChroma[2],
+          name: 'color_set_3',
           colorIds: [],
         },
       ],
@@ -156,16 +166,20 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(defaultLightness),
-        defaultChroma: asChroma(defaultChroma),
-        colorSetIds: ['1'],
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [
+          {
+            colorSetId: '1',
+            lightness: collectionLightness,
+            chroma: collectionChroma,
+          },
+        ],
       },
       colorSets: [
         {
           id: '1',
-          name: 'ColorSet_1',
-          lightness: collectionLightness,
-          chroma: collectionChroma,
+          name: 'color_set_1',
           colorIds: ['1', '2', '3'],
         },
       ],
@@ -212,7 +226,31 @@ describe('generatePaletteColors', () => {
       }).equals(blue.color!)
     ).toBe(true);
   });
-  it('generates collections with colors and undefined for missing colors', () => {
+  it('does not generate collection when palette has no colorSetValues', () => {
+    const defaultLightness = asLightness(0.7);
+    const defaultChroma = asChroma(0.8);
+
+    const result = generatePaletteColors({
+      palette: {
+        id: '1',
+        name: 'Palette_1',
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [],
+      },
+      colorSets: [
+        {
+          id: '1',
+          name: 'color_set_1',
+          colorIds: ['1', '2', '3'],
+        },
+      ],
+      allColors: [...allColors],
+    });
+
+    expect(result.colorSets.length).toBe(0);
+  });
+  it('generates collections with colors', () => {
     const defaultLightness = asLightness(0.7);
     const defaultChroma = asChroma(0.8);
     const collectionLightness = asLightness(0.5);
@@ -222,16 +260,20 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(defaultLightness),
-        defaultChroma: asChroma(defaultChroma),
-        colorSetIds: ['1'],
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [
+          {
+            colorSetId: '1',
+            lightness: collectionLightness,
+            chroma: collectionChroma,
+          },
+        ],
       },
       colorSets: [
         {
           id: '1',
-          name: 'Collection_1',
-          lightness: collectionLightness,
-          chroma: collectionChroma,
+          name: 'collection_1',
           colorIds: ['1', '3'],
         },
       ],
@@ -241,6 +283,8 @@ describe('generatePaletteColors', () => {
     expect(result.colorSets.length).toBe(1);
 
     const colorSet1 = result.colorSets[0];
+    expect(colorSet1.id).toBe('1');
+    expect(colorSet1.name).toBe('collection_1');
     expect(colorSet1.lightness).toBe(collectionLightness);
     expect(colorSet1.chroma).toBe(collectionChroma);
     expect(colorSet1.colors.length).toBe(3);
@@ -253,13 +297,21 @@ describe('generatePaletteColors', () => {
         lightness: collectionLightness,
         harmonizedChroma: collectionChroma,
         hue: redHue,
-      }).equals(red.color!)
+      }).equals(red.color)
     ).toBe(true);
+    expect(red.isInSet).toBe(true);
 
     const green = colorSet1.colors[1];
     expect(green.id).toBe('2');
     expect(green.name).toBe('Green');
-    expect(green.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: greenHue,
+      }).equals(green.color)
+    ).toBe(true);
+    expect(green.isInSet).toBe(false);
 
     const blue = colorSet1.colors[2];
     expect(blue.id).toBe('3');
@@ -269,10 +321,11 @@ describe('generatePaletteColors', () => {
         lightness: collectionLightness,
         harmonizedChroma: collectionChroma,
         hue: blueHue,
-      }).equals(blue.color!)
+      }).equals(blue.color)
     ).toBe(true);
+    expect(blue.isInSet).toBe(true);
   });
-  it('generates collections with colors undefined when all colors are missing', () => {
+  it('generates collections with colors when all colors are missing', () => {
     const defaultLightness = asLightness(0.7);
     const defaultChroma = asChroma(0.8);
     const collectionLightness = asLightness(0.5);
@@ -282,16 +335,20 @@ describe('generatePaletteColors', () => {
       palette: {
         id: '1',
         name: 'Palette_1',
-        defaultLightness: asLightness(defaultLightness),
-        defaultChroma: asChroma(defaultChroma),
-        colorSetIds: ['1'],
+        baseLightness: asLightness(defaultLightness),
+        baseChroma: asChroma(defaultChroma),
+        colorSetValues: [
+          {
+            colorSetId: '1',
+            lightness: collectionLightness,
+            chroma: collectionChroma,
+          },
+        ],
       },
       colorSets: [
         {
           id: '1',
-          name: 'Collection_1',
-          lightness: collectionLightness,
-          chroma: collectionChroma,
+          name: 'collection_1',
           colorIds: [],
         },
       ],
@@ -301,6 +358,8 @@ describe('generatePaletteColors', () => {
     expect(result.colorSets.length).toBe(1);
 
     const colorSet1 = result.colorSets[0];
+    expect(colorSet1.id).toBe('1');
+    expect(colorSet1.name).toBe('collection_1');
     expect(colorSet1.lightness).toBe(collectionLightness);
     expect(colorSet1.chroma).toBe(collectionChroma);
     expect(colorSet1.colors.length).toBe(3);
@@ -308,16 +367,37 @@ describe('generatePaletteColors', () => {
     const red = colorSet1.colors[0];
     expect(red.id).toBe('1');
     expect(red.name).toBe('Red');
-    expect(red.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: redHue,
+      }).equals(red.color)
+    ).toBe(true);
+    expect(red.isInSet).toBe(false);
 
     const green = colorSet1.colors[1];
     expect(green.id).toBe('2');
     expect(green.name).toBe('Green');
-    expect(green.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: greenHue,
+      }).equals(green.color)
+    ).toBe(true);
+    expect(green.isInSet).toBe(false);
 
     const blue = colorSet1.colors[2];
     expect(blue.id).toBe('3');
     expect(blue.name).toBe('Blue');
-    expect(blue.color).toBeUndefined();
+    expect(
+      new OkColor({
+        lightness: collectionLightness,
+        harmonizedChroma: collectionChroma,
+        hue: blueHue,
+      }).equals(blue.color)
+    ).toBe(true);
+    expect(blue.isInSet).toBe(false);
   });
 });

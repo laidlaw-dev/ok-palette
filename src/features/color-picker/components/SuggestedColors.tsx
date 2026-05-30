@@ -9,7 +9,13 @@ interface SuggestedColorsProps {
   onAddColor: (key: string, color: OkColor) => void;
 }
 
-const complementaryKeys = ['complementary', 'split', 'triadic', 'analogous'];
+const complementaryKeys = [
+  'primary',
+  'complementary',
+  'split',
+  'triadic',
+  'analogous',
+];
 
 const achromaticKeys = ['achromatic'];
 
@@ -59,7 +65,13 @@ const ColorGroup = ({ sections, onAddColor }: ColorGroupProps) => {
   return (
     <AnimatePresence>
       {sections.map((section) => (
-        <motion.div key={section.key} exit={{ opacity: 0, scaleY: 0 }} layout>
+        <motion.div
+          key={section.key}
+          initial={{ opacity: 0, scaleY: 0 }}
+          animate={{ opacity: 1, scaleY: 1 }}
+          exit={{ opacity: 0, scaleY: 0 }}
+          layout
+        >
           <OkLabel>{section.key}</OkLabel>
           <div className="flex flex-col gap-1">
             {section.groups.map((group) => (
@@ -68,6 +80,8 @@ const ColorGroup = ({ sections, onAddColor }: ColorGroupProps) => {
                   {group.colors.map((color) => (
                     <motion.div
                       key={color.hue}
+                      initial={{ opacity: 0, scaleY: 0 }}
+                      animate={{ opacity: 1, scaleY: 1 }}
                       exit={{ opacity: 0, scaleY: 0 }}
                       layout
                     >

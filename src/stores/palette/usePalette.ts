@@ -42,6 +42,13 @@ export const usePalette = () => {
     primaryColor: palettes.primaryColor,
     initialize: initialize,
     addColor: palettes.addColor,
+    removeColor: palettes.removeColor,
+    addColorSet: palettes.addColorSet,
+    removeColorSet: palettes.removeColorSet,
+    addColorToSet: palettes.addColorToSet,
+    removeColorFromSet: palettes.removeColorFromSet,
+    setColorSetLightness: palettes.setColorSetLightness,
+    setColorSetChroma: palettes.setColorSetChroma,
     generatedPalette,
   };
 };

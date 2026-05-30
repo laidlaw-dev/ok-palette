@@ -101,9 +101,4 @@ describe('validateColorName', () => {
 
     expect(validateColorName('yellow', usedNames)).toBe(false);
   });
-  it('returns false for primary without a suffix', () => {
-    const usedNames: string[] = ['red', 'green', 'blue'];
-
-    expect(validateColorName('primary', usedNames)).toBe(false);
-  });
 });

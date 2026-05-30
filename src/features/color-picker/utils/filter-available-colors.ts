@@ -19,6 +19,7 @@ export const colorHueMap = [
 ];
 
 const complementaryKeys = [
+  'primary',
   'complementary',
   'split',
   'triadic',

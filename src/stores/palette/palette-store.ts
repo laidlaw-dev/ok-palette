@@ -1,12 +1,31 @@
-import { OkColor } from '@/domain/color';
+import {
+  asChroma,
+  asLightness,
+  OkColor,
+  type Chroma,
+  type Lightness,
+} from '@/domain/color';
 import { create } from 'zustand';
 import { nanoid } from 'nanoid';
-import type { PaletteCollection } from './palette-types';
+import type { ColorSetType, PaletteCollection } from './palette-types';
+import {
+  colorAlreadyInSetError,
+  colorNotFoundError,
+  colorNotInSetError,
+  colorSetNotFoundError,
+} from './palette-errors';
 
 type PaletteStore = PaletteCollection & {
   selectedPaletteId: string;
   initialize: (name: string, primaryColor: OkColor) => void;
   addColor: (name: string, color: OkColor) => void;
+  removeColor: (colorId: string) => void;
+  addColorSet: (name: string, type: ColorSetType) => void;
+  removeColorSet: (colorSetId: string) => void;
+  addColorToSet: (colorSetId: string, colorId: string) => void;
+  removeColorFromSet: (colorSetId: string, colorId: string) => void;
+  setColorSetLightness: (colorSetId: string, lightness: Lightness) => void;
+  setColorSetChroma: (colorSetId: string, chroma: Chroma) => void;
   reset: () => void;
 };
 
@@ -47,9 +66,9 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
         {
           id: paletteId,
           name: undefined,
-          defaultLightness: primaryColor.lightness,
-          defaultChroma: primaryColor.harmonizedChroma,
-          colorSetIds: [],
+          baseLightness: primaryColor.lightness,
+          baseChroma: primaryColor.harmonizedChroma,
+          colorSetValues: [],
         },
       ],
       colorSets: [],
@@ -62,7 +81,157 @@ export const usePaletteStore = create<PaletteStore>((set, _get, store) => ({
       return { colors: [...state.colors, newColor] };
     });
   },
+  removeColor: (colorId) => {
+    set((state) => {
+      if (!state.colors.some((color) => color.id === colorId))
+        throw new Error(colorNotFoundError(colorId));
+      return {
+        colors: state.colors.filter((color) => color.id !== colorId),
+        colorSets: state.colorSets.map((colorSet) => ({
+          ...colorSet,
+          colorIds: colorSet.colorIds.filter((id) => id !== colorId),
+        })),
+      };
+    });
+  },
+  addColorSet: (name, type) => {
+    set((state) => {
+      const id = nanoid();
+      const newColorSet = {
+        id: id,
+        name,
+        colorIds: [],
+      };
+      return {
+        colorSets: [...state.colorSets, newColorSet],
+        palettes: state.palettes.map((palette) => ({
+          ...palette,
+          colorSetValues: [
+            ...palette.colorSetValues,
+            {
+              colorSetId: id,
+              ...getDefaultColorSetValues(
+                type,
+                state.primaryColor.lightness,
+                state.primaryColor.harmonizedChroma
+              ),
+            },
+          ],
+        })),
+      };
+    });
+  },
+  removeColorSet: (colorSetId) => {
+    set((state) => {
+      if (!state.colorSets.some((set) => set.id === colorSetId))
+        throw new Error(colorSetNotFoundError(colorSetId));
+      return {
+        colorSets: state.colorSets.filter((set) => set.id !== colorSetId),
+        palettes: state.palettes.map((palette) => ({
+          ...palette,
+          colorSetValues: palette.colorSetValues.filter(
+            (value) => value.colorSetId !== colorSetId
+          ),
+        })),
+      };
+    });
+  },
+  addColorToSet: (colorSetId, colorId) => {
+    set((state) => {
+      const colorExists = state.colors.some((color) => color.id === colorId);
+      if (!colorExists) throw new Error(colorNotFoundError(colorId));
+      const colorSet = state.colorSets.find((set) => set.id === colorSetId);
+      if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+      if (colorSet.colorIds.includes(colorId))
+        throw new Error(colorAlreadyInSetError(colorId, colorSetId));
+      if (!colorExists) return state;
+      return {
+        colorSets: state.colorSets.map((colorSet) =>
+          colorSet.id === colorSetId
+            ? { ...colorSet, colorIds: [...colorSet.colorIds, colorId] }
+            : colorSet
+        ),
+      };
+    });
+  },
+  removeColorFromSet: (colorSetId, colorId) => {
+    set((state) => {
+      const colorSet = state.colorSets.find((set) => set.id === colorSetId);
+      if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+      if (!colorSet.colorIds.includes(colorId))
+        throw new Error(colorNotInSetError(colorId, colorSetId));
+      return {
+        colorSets: state.colorSets.map((colorSet) =>
+          colorSet.id === colorSetId
+            ? {
+                ...colorSet,
+                colorIds: colorSet.colorIds.filter((id) => id !== colorId),
+              }
+            : colorSet
+        ),
+      };
+    });
+  },
+  setColorSetLightness(colorSetId, lightness) {
+    set((state) => ({
+      palettes: state.palettes.map((palette) => {
+        if (palette.id !== state.selectedPaletteId) return palette;
+        const colorSet = palette.colorSetValues.find(
+          (set) => set.colorSetId === colorSetId
+        );
+        if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+        return {
+          ...palette,
+          colorSetValues: palette.colorSetValues.map((set) =>
+            set.colorSetId === colorSetId
+              ? { ...set, lightness: asLightness(lightness) }
+              : set
+          ),
+        };
+      }),
+    }));
+  },
+  setColorSetChroma(colorSetId, chroma) {
+    set((state) => ({
+      palettes: state.palettes.map((palette) => {
+        if (palette.id !== state.selectedPaletteId) return palette;
+        const colorSet = palette.colorSetValues.find(
+          (set) => set.colorSetId === colorSetId
+        );
+        if (!colorSet) throw new Error(colorSetNotFoundError(colorSetId));
+        return {
+          ...palette,
+          colorSetValues: palette.colorSetValues.map((set) =>
+            set.colorSetId === colorSetId
+              ? { ...set, chroma: asChroma(chroma) }
+              : set
+          ),
+        };
+      }),
+    }));
+  },
   reset: () => {
     set(store.getInitialState());
   },
 }));
+
+const getDefaultColorSetValues = (
+  type: ColorSetType,
+  defaultLightness: Lightness,
+  defaultChroma: Chroma
+): { lightness: Lightness; chroma: Chroma } => {
+  switch (type) {
+    case 'surface':
+      return { lightness: asLightness(0.9), chroma: defaultChroma };
+    case 'text':
+      return { lightness: asLightness(0.1), chroma: asChroma(0.1) };
+    case 'border':
+      return {
+        lightness: asLightness(defaultLightness - 0.1),
+        chroma: defaultChroma,
+      };
+    case 'default':
+    default:
+      return { lightness: defaultLightness, chroma: defaultChroma };
+  }
+};
